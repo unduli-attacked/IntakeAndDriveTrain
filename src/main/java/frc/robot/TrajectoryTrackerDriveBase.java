@@ -15,9 +15,10 @@ import org.ghrobotics.lib.mathematics.units.derivedunits.Velocity;
 import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
 
 import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.PWMSpeedController;
 
 public abstract class TrajectoryTrackerDriveBase {
-  PWM leftMotor, rightMotor;
+  HalfBakedEncodedPWMMotorController leftMotor, rightMotor;
 
   Pose2d robotPosition;
 
