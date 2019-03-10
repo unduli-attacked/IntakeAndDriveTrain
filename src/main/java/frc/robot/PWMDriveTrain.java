@@ -77,13 +77,13 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 
     differentialDrive = new DifferentialDrive(mass.getKilogram(), moi, angularDrag, wheelRadius.getMeter(), trackWidth.getMeter() / 2, leftTransmission, rightTransmission);
 
-    lMaster = new HalfBakedEncodedPWMMotorController(RobotConfig.leftMasterMotorPort, leftLengthModel);
-    lSlave = new HalfBakedEncodedPWMMotorController(RobotConfig.leftSlaveMotorPort, leftLengthModel);
-    lSlave.set(ControlMode.Follower, lMaster.getDeviceID());
+    lMaster = new EncodedSpark(RobotConfig.leftMasterMotorPort, leftLengthModel);
+    // lSlave = new EncodedSpark(RobotConfig.leftSlaveMotorPort, leftLengthModel);
+    // lSlave.set(ControlMode.Follower, lMaster.getDeviceID());
 
-    rMaster = new HalfBakedEncodedPWMMotorController(RobotConfig.rightMasterMotorPort, rightLengthModel, TimeUnitsKt.getMillisecond(10));
-    rSlave = new HalfBakedEncodedPWMMotorController(RobotConfig.rightSlaveMotorPort, rightLengthModel, TimeUnitsKt.getMillisecond(10));
-    rSlave.set(ControlMode.Follower, rMaster.getDeviceID());
+    rMaster = new EncodedSpark(RobotConfig.rightMasterMotorPort, rightLengthModel, TimeUnitsKt.getMillisecond(10));
+    // rSlave = new HalfBakedEncodedPWMMotorController(RobotConfig.rightSlaveMotorPort, rightLengthModel, TimeUnitsKt.getMillisecond(10));
+    // rSlave.set(ControlMode.Follower, rMaster.getDeviceID());
 
 
     ramseteTracker = new RamseteTracker(kDriveBeta, kDriveZeta);
