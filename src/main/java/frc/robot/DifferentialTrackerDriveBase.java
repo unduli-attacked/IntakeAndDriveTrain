@@ -4,6 +4,9 @@ import com.team254.lib.physics.DifferentialDrive;
 import com.team254.lib.physics.DifferentialDrive.ChassisState;
 import com.team254.lib.physics.DifferentialDrive.WheelState;
 
+import org.ghrobotics.lib.mathematics.units.LengthKt;
+import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
+
 import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.TrajectoryTrackerDriveBase.TrajectoryTrackerOutput;
 
@@ -12,7 +15,7 @@ public abstract class DifferentialTrackerDriveBase extends TrajectoryTrackerDriv
 
   @Override
   void setOutput(TrajectoryTrackerOutput output){
-
+    setOutputFromDynamics(output.differentialDriveVelocity, output.differentialDriveAcceleration);
   }
 
   void setOutputFromKinematics(ChassisState chassisVelocity){
@@ -29,8 +32,24 @@ public abstract class DifferentialTrackerDriveBase extends TrajectoryTrackerDriv
   }
 
   void setOutput(WheelState wheelVelocities, WheelState wheelVoltages){
-    leftMotor.setSpeed(speed);
+    // DifferentialDrive.WheelState wheelVelocities;
+    // wheelVoltages: DifferentialDrive.WheelState
+// ) {
+
+    var leftSpeed = VelocityKt.getVelocity(LengthKt.getMeter((wheelVelocities.getLeft() * differentialDrive.getWheelRadius())));
+
+    var rightSpeed = VelocityKt.getVelocity(LengthKt.getMeter((wheelVelocities.getRight() * differentialDrive.getWheelRadius())));
+
+
+    leftMotor.setVelocityAndArbitraryFeedForward(
+        leftSpeed,
+        wheelVoltages.getLeft() / 12.0
+    );
+    rightMotor.setVelocityAndArbitraryFeedForward(
+        rightSpeed,
+        wheelVoltages.getRight() / 12.0
+    );
+
   }
 
-  private double getSpeedFromVelocity(Encoder motorEncoder)
 }
