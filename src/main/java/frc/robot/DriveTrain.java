@@ -46,9 +46,7 @@ public class DriveTrain extends TankDriveSubsystem {
     rSlave = new FalconSRX<Length>(RobotConfig.rightSlaveMotorPort, rightLengthModel, TimeUnitsKt.getMillisecond(10));
     rSlave.set(ControlMode.Follower, rMaster.getDeviceID());
 
-
     ramseteTracker = new RamseteTracker(kDriveBeta, kDriveZeta);
-
     
 		/* Create a localization object because lamda expressions are fun */
 		localization = new TankEncoderLocalization(() -> getGyro(),
