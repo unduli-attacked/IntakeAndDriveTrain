@@ -12,8 +12,9 @@ import edu.wpi.first.wpilibj.PIDInterface;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PWMSpeedController;
+import edu.wpi.first.wpilibj.Spark;
 
-public class HalfBakedEncodedPWMMotorController extends PWMSpeedController {
+public abstract class HalfBakedEncodedPWMMotorController extends PWMSpeedController {
 
     private Encoder encoder;
     private NativeUnitLengthModel model;
@@ -26,7 +27,6 @@ public class HalfBakedEncodedPWMMotorController extends PWMSpeedController {
         this.model = model;
         encoder.setPIDSourceType(PIDSourceType.kRate);
         controller = new PIDController(settings.kp, settings.ki, settings.kd, encoder, this);
-
     }
 
     public void setVelocityAndArbitraryFeedForward(Velocity<Length> speed, double arbitraryFeedForward) {
