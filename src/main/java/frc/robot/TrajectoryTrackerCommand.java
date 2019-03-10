@@ -16,7 +16,6 @@ import org.ghrobotics.lib.subsystems.drive.TrajectoryTrackerOutput;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Robot;
 
 // @SuppressWarnings({"WeakerAccess", "unused"})
 public class TrajectoryTrackerCommand extends Command {
