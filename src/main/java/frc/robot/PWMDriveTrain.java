@@ -17,22 +17,24 @@ import org.ghrobotics.lib.mathematics.units.MassKt;
 import org.ghrobotics.lib.mathematics.units.Rotation2d;
 import org.ghrobotics.lib.mathematics.units.Rotation2dKt;
 import org.ghrobotics.lib.mathematics.units.TimeUnitsKt;
+import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
 import org.ghrobotics.lib.wrappers.ctre.FalconSRX;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDriveBase {
 
-  HalfBakedEncodedPWMMotorController lMaster, rMaster, lSlave, rSlave;
+  EncodedSpark lMaster, rMaster;//, lSlave, rSlave;
   public static final NativeUnitLengthModel leftLengthModel = new NativeUnitLengthModel(RobotConfig.driveTrainUnitsPerRot, RobotConfig.leftWheelRadius);
   public static final NativeUnitLengthModel rightLengthModel = new NativeUnitLengthModel(RobotConfig.driveTrainUnitsPerRot, RobotConfig.rightWheelRadius);
   RamseteTracker ramseteTracker;
   	/* Ramsete constants */
 	public static final double kDriveBeta = 2 * 1d; // Inverse meters squared
   public static final double kDriveZeta = 0.7 * 1d; // Unitless dampening co-efficient
-  
+
   Localization localization;
 
   public AHRS gyro = new AHRS(SPI.Port.kMXP);
@@ -77,7 +79,10 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 
     differentialDrive = new DifferentialDrive(mass.getKilogram(), moi, angularDrag, wheelRadius.getMeter(), trackWidth.getMeter() / 2, leftTransmission, rightTransmission);
 
-    lMaster = new EncodedSpark(RobotConfig.leftMasterMotorPort, leftLengthModel);
+    var leftEncoder = new Encoder(Constants.kLeftEncoderA, Constants.kLeftEncoderB, Constants.kLeftEncoderInvert);
+    var leftModel = new NativeUnitLengthModel(NativeUnitKt.getNativeUnits(1024), Constants.kWheelDiameter.div(2));
+
+    lMaster = new EncodedSpark(Constants.kLeftMotor, leftEncoder, model, settings);
     // lSlave = new EncodedSpark(RobotConfig.leftSlaveMotorPort, leftLengthModel);
     // lSlave.set(ControlMode.Follower, lMaster.getDeviceID());
 
