@@ -9,11 +9,6 @@ import edu.wpi.first.wpilibj.PIDController;
 
 public class EncodedSpark extends HalfBakedEncodedPWMMotorController {
 
-    private Encoder encoder;
-    private NativeUnitLengthModel model;
-    private PIDController controller;
-    private double arbitraryFeedForwardValue = 0;
-
     public EncodedSpark(int channel, Encoder encoder, NativeUnitLengthModel model, PIDSetting settings) {
         
         super(channel, encoder, model, settings);
