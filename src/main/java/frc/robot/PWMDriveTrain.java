@@ -20,7 +20,7 @@ import org.ghrobotics.lib.wrappers.ctre.FalconSRX;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.DifferentialTrackerDriveBase;
 
-public class PWMDriveTrain implements DifferentialTrackerDriveBase {
+public class PWMDriveTrain extends DifferentialTrackerDriveBase {
 
   FalconSRX<Length> lMaster, rMaster, lSlave, rSlave;
   public static final NativeUnitLengthModel leftLengthModel = new NativeUnitLengthModel(RobotConfig.driveTrainUnitsPerRot, RobotConfig.leftWheelRadius);
