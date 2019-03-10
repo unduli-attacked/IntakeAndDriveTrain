@@ -26,6 +26,7 @@ public class HalfBakedEncodedPWMMotorController extends PWMSpeedController {
         this.model = model;
         encoder.setPIDSourceType(PIDSourceType.kRate);
         controller = new PIDController(settings.kp, settings.ki, settings.kd, encoder, this);
+
     }
 
     public void setVelocityAndArbitraryFeedForward(Velocity<Length> speed, double arbitraryFeedForward) {
