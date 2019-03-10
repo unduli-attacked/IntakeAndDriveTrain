@@ -56,12 +56,6 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 
 	protected PWMDriveTrain() {
 
-		var mass = RobotConfig.kRobotMass;
-		var moi = 10;
-		var angularDrag = 12;
-		var wheelRadius = LengthKt.getInch(6);
-		var trackWidth = LengthKt.getInch(24); // todo change me
-
 		differentialDrive = RobotConfig.VeryStatic.kLowGearDifferentialDrive;
 
 		var leftEncoder = new Encoder(Constants.kLeftEncoderA, Constants.kLeftEncoderB, Constants.kLeftEncoderInvert);

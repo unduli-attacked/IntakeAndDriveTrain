@@ -30,7 +30,7 @@ public class RobotConfig {
 	public static final double kRobotMomentOfInertia = 10.0; // kg m^2 // TODO Tune
 	public static final double kRobotAngularDrag = 12.0; // N*m / (rad/sec)
 
-	public static final double kWheelRadius = (2f / 12f) * 0.3048;// meters. TODO tune
+	public static final double kWheelRadius = (3f / 12f) * 0.3048;// meters. TODO tune
 	public static final double kTrackWidth = (26f / 12f) * 0.3048;// meters
 
 	private static final double kVDriveLeftLow = 0.265 * 1d; // Volts per radians per second - Calculated emperically
