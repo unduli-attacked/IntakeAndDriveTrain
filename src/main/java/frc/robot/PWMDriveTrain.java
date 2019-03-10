@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
+import com.team254.lib.physics.DCMotorTransmission;
 import com.team254.lib.physics.DifferentialDrive;
 
 import org.ghrobotics.lib.localization.Localization;
@@ -10,19 +11,21 @@ import org.ghrobotics.lib.mathematics.twodim.control.RamseteTracker;
 import org.ghrobotics.lib.mathematics.twodim.control.TrajectoryTracker;
 import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2d;
 import org.ghrobotics.lib.mathematics.units.Length;
+import org.ghrobotics.lib.mathematics.units.LengthKt;
+import org.ghrobotics.lib.mathematics.units.Mass;
+import org.ghrobotics.lib.mathematics.units.MassKt;
 import org.ghrobotics.lib.mathematics.units.Rotation2d;
 import org.ghrobotics.lib.mathematics.units.Rotation2dKt;
 import org.ghrobotics.lib.mathematics.units.TimeUnitsKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
-import org.ghrobotics.lib.subsystems.drive.TankDriveSubsystem;
 import org.ghrobotics.lib.wrappers.ctre.FalconSRX;
 
 import edu.wpi.first.wpilibj.SPI;
-import frc.robot.DifferentialTrackerDriveBase;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class PWMDriveTrain extends DifferentialTrackerDriveBase {
+public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDriveBase {
 
-  FalconSRX<Length> lMaster, rMaster, lSlave, rSlave;
+  HalfBakedEncodedPWMMotorController lMaster, rMaster, lSlave, rSlave;
   public static final NativeUnitLengthModel leftLengthModel = new NativeUnitLengthModel(RobotConfig.driveTrainUnitsPerRot, RobotConfig.leftWheelRadius);
   public static final NativeUnitLengthModel rightLengthModel = new NativeUnitLengthModel(RobotConfig.driveTrainUnitsPerRot, RobotConfig.rightWheelRadius);
   RamseteTracker ramseteTracker;
@@ -37,14 +40,49 @@ public class PWMDriveTrain extends DifferentialTrackerDriveBase {
   
   private static DriveTrain inst;
 
+  private DifferentialDrive differentialDrive;
+
+	private static final double kVDriveLeftLow = 0.265 * 1d; // Volts per radians per second - Calculated emperically
+	private static final double kADriveLeftLow = 0.027 * 1d; // Volts per radians per second per second TODO tune
+	private static final double kVInterceptLeftLow = 0.95 * 1d; // Volts - tuned!
+
+	private static final double kVDriveRightLow = 0.275 * 1d; // Volts per radians per second - Calculated emperically
+	private static final double kADriveRightLow = 0.0286 * 1d; // Volts per radians per second per second TODO tune
+	private static final double kVInterceptRightLow = 0.96 * 1d; // Volts - tuned!
+
+	public final DCMotorTransmission leftTransmission;// = new DCMotorTransmission(1 / kVDriveLeftLow,
+			// kWheelRadius * kWheelRadius * kRobotMass / (2.0 * kADriveLeftLow),
+			// kVInterceptLeftLow);
+
+	public final DCMotorTransmission rightTransmission;// = new DCMotorTransmission(1 / kVDriveRightLow,
+			// kWheelRadius * kWheelRadius * kRobotMass / (2.0 * kADriveRightLow),
+			// kVInterceptRightLow);
+
 
   protected PWMDriveTrain(){
-    lMaster = new FalconSRX<Length>(RobotConfig.leftMasterMotorPort, leftLengthModel, TimeUnitsKt.getMillisecond(10));
-    lSlave = new FalconSRX<Length>(RobotConfig.leftSlaveMotorPort, leftLengthModel, TimeUnitsKt.getMillisecond(10));
+
+    var mass = MassKt.getLb(100);
+    var moi = 10;
+    var angularDrag = 12;
+    var wheelRadius = LengthKt.getInch(6);
+    var trackWidth = LengthKt.getInch(24); // todo change me
+
+    leftTransmission = new DCMotorTransmission(1 / kVDriveLeftLow,
+    wheelRadius.getMeter() * wheelRadius.getMeter() * mass.getKilogram() / (2.0 * kADriveLeftLow),
+    kVInterceptLeftLow);
+
+    rightTransmission = new DCMotorTransmission(1 / kVDriveRightLow,
+      wheelRadius.getMeter() * wheelRadius.getMeter() * mass.getKilogram() / (2.0 * kADriveRightLow),
+      kVInterceptRightLow);
+
+    differentialDrive = new DifferentialDrive(mass.getKilogram(), moi, angularDrag, wheelRadius.getMeter(), trackWidth.getMeter() / 2, leftTransmission, rightTransmission);
+
+    lMaster = new HalfBakedEncodedPWMMotorController(RobotConfig.leftMasterMotorPort, leftLengthModel);
+    lSlave = new HalfBakedEncodedPWMMotorController(RobotConfig.leftSlaveMotorPort, leftLengthModel);
     lSlave.set(ControlMode.Follower, lMaster.getDeviceID());
 
-    rMaster = new FalconSRX<Length>(RobotConfig.rightMasterMotorPort, rightLengthModel, TimeUnitsKt.getMillisecond(10));
-    rSlave = new FalconSRX<Length>(RobotConfig.rightSlaveMotorPort, rightLengthModel, TimeUnitsKt.getMillisecond(10));
+    rMaster = new HalfBakedEncodedPWMMotorController(RobotConfig.rightMasterMotorPort, rightLengthModel, TimeUnitsKt.getMillisecond(10));
+    rSlave = new HalfBakedEncodedPWMMotorController(RobotConfig.rightSlaveMotorPort, rightLengthModel, TimeUnitsKt.getMillisecond(10));
     rSlave.set(ControlMode.Follower, rMaster.getDeviceID());
 
 
@@ -69,27 +107,27 @@ public class PWMDriveTrain extends DifferentialTrackerDriveBase {
   }
   
   public Length getLeftDistance(){
-    return getLeftMotor().getSensorPosition();
+    return getLeftMotor().getDistance();
   }
 
   public Length getRightDistance(){
-    return getRightMotor().getSensorPosition();
+    return getRightMotor().getDistance();
   }
 
-  public FalconSRX<Length> getLeftMotor() {
-    return this.lMaster;
-  }
+  // public FalconSRX<Length> getLeftMotor() {
+    // return this.lMaster;
+  // }
 
-  public FalconSRX<Length> getRightMotor() {
-    return this.rMaster;
-  }
+  // public FalconSRX<Length> getRightMotor() {
+    // return this.rMaster;
+  // }
 
   public TrajectoryTracker getTrajectoryTracker() {
     return ramseteTracker;
   }
 
   public DifferentialDrive getDifferentialDrive() {
-    return null;
+    return differentialDrive;
   }
 
   public Localization getLocalization() {
@@ -103,13 +141,53 @@ public class PWMDriveTrain extends DifferentialTrackerDriveBase {
   }
 
   public void stop(){
-    getLeftMotor().set(ControlMode.PercentOutput, 0);
-    getRightMotor().set(ControlMode.PercentOutput, 0);
+    getLeftMotor().set(0);
+    getRightMotor().set(0);
+  }
+
+  // @Override
+  // void setOutput(TrajectoryTrackerOutput output) {
+
+  // }
+
+  // @Override
+  // public HalfBakedEncodedPWMMotorController getLeftMotor() {
+    // return lMaster;
+  // }
+
+  // @Override
+  // public HalfBakedEncodedPWMMotorController getRightMotor() {
+    // return rMaster;
+  // }
+
+  @Override
+  public Pose2d getRobotPosition() {
+    return localization.getRobotPosition();
   }
 
   @Override
-  void setOutput(TrajectoryTrackerOutput output) {
+  public TrajectoryTracker getTracker() {
+    return ramseteTracker;
+  }
+
+  @Override
+  protected void initDefaultCommand() {
 
   }
+
+  @Override
+  public HalfBakedEncodedPWMMotorController getLeftMotor() {
+    return lMaster;
+  }
+
+  @Override
+  public HalfBakedEncodedPWMMotorController getRightMotor() {
+    return rMaster;
+  }
+
+  // @Override
+  // public void setOutput(TrajectoryTrackerOutput output) {
+
+  // }
 
 }

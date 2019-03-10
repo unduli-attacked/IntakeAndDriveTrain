@@ -19,13 +19,14 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 // @SuppressWarnings({"WeakerAccess", "unused"})
-public class TrajectoryTrackerCommand extends Command {
+public class PWMTrajectoryTrackerCommand extends Command {
 	private TrajectoryTracker trajectoryTracker;
 	private Supplier<TimedTrajectory<Pose2dWithCurvature>> trajectorySource;
-	private DriveTrain driveBase;
+	private PWMDriveTrain driveBase;
 	private boolean reset;
 	private TrajectoryTrackerOutput output;
-	// TODO make sure that this fabled namespace collision doesn't happen on Shuffleboard 
+	// TODO make sure that this fabled namespace collision doesn't happen on
+	// Shuffleboard
 	Length mDesiredLeft;
 	Length mDesiredRight;
 	double mCurrentLeft;
@@ -33,16 +34,19 @@ public class TrajectoryTrackerCommand extends Command {
 
 	Notifier mUpdateNotifier;
 
-	public TrajectoryTrackerCommand(DriveTrain driveBase, Supplier<TimedTrajectory<Pose2dWithCurvature>> trajectorySource) {
+	public PWMTrajectoryTrackerCommand(PWMDriveTrain driveBase,
+			Supplier<TimedTrajectory<Pose2dWithCurvature>> trajectorySource) {
 		this(driveBase, trajectorySource, false);
 	}
 
-	public TrajectoryTrackerCommand(DriveTrain driveBase, Supplier<TimedTrajectory<Pose2dWithCurvature>> trajectorySource, boolean reset) {
+	public PWMTrajectoryTrackerCommand(PWMDriveTrain driveBase,
+			Supplier<TimedTrajectory<Pose2dWithCurvature>> trajectorySource, boolean reset) {
 		this(driveBase, DriveTrain.getInstance().getTrajectoryTracker(), trajectorySource, reset);
 	}
 
-	public TrajectoryTrackerCommand(DriveTrain driveBase, TrajectoryTracker trajectoryTracker, Supplier<TimedTrajectory<Pose2dWithCurvature>> trajectorySource, boolean reset) {
-		requires(driveBase.getWpiSubsystem());
+	public PWMTrajectoryTrackerCommand(PWMDriveTrain driveBase, TrajectoryTracker trajectoryTracker,
+			Supplier<TimedTrajectory<Pose2dWithCurvature>> trajectorySource, boolean reset) {
+		requires(driveBase);
 		this.driveBase = driveBase;
 		this.trajectoryTracker = trajectoryTracker;
 		this.trajectorySource = trajectorySource;

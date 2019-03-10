@@ -10,42 +10,42 @@ import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
 import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.TrajectoryTrackerDriveBase.TrajectoryTrackerOutput;
 
-public abstract class DifferentialTrackerDriveBase extends TrajectoryTrackerDriveBase{
-  DifferentialDrive differentialDrive;
+public interface DifferentialTrackerDriveBase extends TrajectoryTrackerDriveBase{
+  DifferentialDrive getDifferentialDrive();
 
-  @Override
-  void setOutput(TrajectoryTrackerOutput output){
-    setOutputFromDynamics(output.differentialDriveVelocity, output.differentialDriveAcceleration);
+  // @Override
+  default void setOutput(org.ghrobotics.lib.subsystems.drive.TrajectoryTrackerOutput output){
+    setOutputFromDynamics(output.getDifferentialDriveVelocity(), output.getDifferentialDriveAcceleration());
   }
 
-  void setOutputFromKinematics(ChassisState chassisVelocity){
-    var wheelVelocities = differentialDrive.solveInverseKinematics(chassisVelocity);
-    var feedForwardVoltages = differentialDrive.getVoltagesFromkV(wheelVelocities);
+  default void setOutputFromKinematics(ChassisState chassisVelocity){
+    var wheelVelocities = getDifferentialDrive().solveInverseKinematics(chassisVelocity);
+    var feedForwardVoltages = getDifferentialDrive().getVoltagesFromkV(wheelVelocities);
 
     setOutput(wheelVelocities, feedForwardVoltages);
   }
 
-  void setOutputFromDynamics(ChassisState chassisVelocity, ChassisState chassisAcceleration){
-    var dynamics = differentialDrive.solveInverseDynamics(chassisVelocity, chassisAcceleration);
+  default void setOutputFromDynamics(ChassisState chassisVelocity, ChassisState chassisAcceleration){
+    var dynamics = getDifferentialDrive().solveInverseDynamics(chassisVelocity, chassisAcceleration);
 
     setOutput(dynamics.getWheelVelocity(), dynamics.getVoltage());
   }
 
-  void setOutput(WheelState wheelVelocities, WheelState wheelVoltages){
+  default void setOutput(WheelState wheelVelocities, WheelState wheelVoltages){
     // DifferentialDrive.WheelState wheelVelocities;
     // wheelVoltages: DifferentialDrive.WheelState
 // ) {
 
-    var leftSpeed = VelocityKt.getVelocity(LengthKt.getMeter((wheelVelocities.getLeft() * differentialDrive.getWheelRadius())));
+    var leftSpeed = VelocityKt.getVelocity(LengthKt.getMeter((wheelVelocities.getLeft() * getDifferentialDrive().getWheelRadius())));
 
-    var rightSpeed = VelocityKt.getVelocity(LengthKt.getMeter((wheelVelocities.getRight() * differentialDrive.getWheelRadius())));
+    var rightSpeed = VelocityKt.getVelocity(LengthKt.getMeter((wheelVelocities.getRight() * getDifferentialDrive().getWheelRadius())));
 
 
-    leftMotor.setVelocityAndArbitraryFeedForward(
+    getLeftMotor().setVelocityAndArbitraryFeedForward(
         leftSpeed,
         wheelVoltages.getLeft() / 12.0
     );
-    rightMotor.setVelocityAndArbitraryFeedForward(
+    getRightMotor().setVelocityAndArbitraryFeedForward(
         rightSpeed,
         wheelVoltages.getRight() / 12.0
     );

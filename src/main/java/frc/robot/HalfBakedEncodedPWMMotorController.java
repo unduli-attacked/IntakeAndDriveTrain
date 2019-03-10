@@ -2,6 +2,7 @@ package frc.robot;
 
 import org.ghrobotics.lib.mathematics.units.Length;
 import org.ghrobotics.lib.mathematics.units.derivedunits.Velocity;
+import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitVelocityKt;
 
@@ -33,6 +34,12 @@ public class HalfBakedEncodedPWMMotorController extends PWMSpeedController {
         controller.setSetpoint(rawVel.getValue());
 
         arbitraryFeedForwardValue = arbitraryFeedForward;
+    }
+
+    public Length getDistance() {
+        var rawDistance = encoder.getDistance();
+        var distance = model.fromNativeUnitPosition(NativeUnitKt.getNativeUnits(rawDistance));
+        return distance;
     }
 
     public double getRawPos() {

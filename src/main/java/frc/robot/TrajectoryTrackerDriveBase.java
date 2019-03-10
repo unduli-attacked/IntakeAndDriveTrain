@@ -17,18 +17,21 @@ import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.PWMSpeedController;
 
-public abstract class TrajectoryTrackerDriveBase {
-  HalfBakedEncodedPWMMotorController leftMotor, rightMotor;
+public interface TrajectoryTrackerDriveBase {
+  HalfBakedEncodedPWMMotorController getLeftMotor();
+  HalfBakedEncodedPWMMotorController getRightMotor();
 
-  Pose2d robotPosition;
+  Pose2d getRobotPosition();
 
-  TrajectoryTracker tracker;
+  // TrajectoryTracker tracker;
+
+  TrajectoryTracker getTracker();
 
   abstract void setOutput(TrajectoryTrackerOutput output);
 
-  void zeroOutputs(){
-    leftMotor.setRaw(0);
-    rightMotor.setRaw(0);
+  default void zeroOutputs(){
+    getLeftMotor().set(0);
+    getRightMotor().set(0);
   }
 
 
