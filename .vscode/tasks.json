@@ -1,0 +1,81 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "run unit tests",
+      "type": "shell",
+      "command": "./gradlew test",
+      "windows": {
+        "command": ".\\gradlew.bat test"
+      },
+      "linux": {
+        "command": "./gradlew test"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Simulate an auto path",
+      "type": "shell",
+      "command": "./genPath.ps1",
+      "windows": {
+        "command": "./genPath.ps1"
+      },
+      "linux": {
+        "command": "./genPath.ps1"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run visualizer",
+      "type": "shell",
+      "command": "python ./src/main/PurePersuitVisualizer/visualizer.py",
+      "windows": {
+        "command": "python .\\src\\main\\PurePersuitVisualizer\\visualizer.py",
+      },
+      "linux": {
+        "command": "python src/main/PurePursuitVisualizer/visualizer.py",
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build and deploy",
+      "type": "shell",
+      "command": "./buildDeploy.sh",
+      "windows": {
+        "command": "./buildDeploy.ps1"
+      },
+      "linux": {
+        "command": "./buildDeploy.sh"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Simulate Superstructure",
+      "type": "shell",
+      "command": " & ~/desktop/python/python37/python.exe src/main/python/angles.py",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
