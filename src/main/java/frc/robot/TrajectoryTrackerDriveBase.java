@@ -13,6 +13,7 @@ import org.ghrobotics.lib.mathematics.units.derivedunits.Acceleration;
 import org.ghrobotics.lib.mathematics.units.derivedunits.AccelerationKt;
 import org.ghrobotics.lib.mathematics.units.derivedunits.Velocity;
 import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
+import org.ghrobotics.lib.subsystems.drive.TrajectoryTrackerOutput;
 
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.PWMSpeedController;
@@ -34,52 +35,52 @@ public interface TrajectoryTrackerDriveBase {
     getRightMotor().set(0);
   }
 
+  // // REeeeeeeeeeee this is messing up the code
+  // class TrajectoryTrackerOutput{
+  //   Velocity<Length> linearV;
+  //   Acceleration<Length> linearA;
+  //   Velocity<Rotation2d> angularV;
+  //   Acceleration<Rotation2d> angularA;
+  //   DifferentialDrive.ChassisState differentialDriveVelocity, differentialDriveAcceleration;
+  //   public TrajectoryTrackerOutput(double _linearV, double _linearA, double _angularV, double _angularA){
+  //     this.linearV = VelocityKt.getVelocity(LengthKt.getMeter(_linearV));
+  //     this.linearA = AccelerationKt.getAcceleration(LengthKt.getMeter(_linearA));
 
-  class TrajectoryTrackerOutput{
-    Velocity<Length> linearV;
-    Acceleration<Length> linearA;
-    Velocity<Rotation2d> angularV;
-    Acceleration<Rotation2d> angularA;
-    DifferentialDrive.ChassisState differentialDriveVelocity, differentialDriveAcceleration;
-    public TrajectoryTrackerOutput(double _linearV, double _linearA, double _angularV, double _angularA){
-      this.linearV = VelocityKt.getVelocity(LengthKt.getMeter(_linearV));
-      this.linearA = AccelerationKt.getAcceleration(LengthKt.getMeter(_linearA));
+  //     this.angularV = VelocityKt.getVelocity(Rotation2dKt.getRadian(_angularV));
+  //     this.angularA = AccelerationKt.getAcceleration(Rotation2dKt.getRadian(_angularA));
 
-      this.angularV = VelocityKt.getVelocity(Rotation2dKt.getRadian(_angularV));
-      this.angularA = AccelerationKt.getAcceleration(Rotation2dKt.getRadian(_angularA));
+  //     this.differentialDriveAcceleration = new DifferentialDrive.ChassisState(_linearA, _angularA);
+  //     this.differentialDriveVelocity = new DifferentialDrive.ChassisState(_linearV, _angularV);
+  //   }
 
-      this.differentialDriveAcceleration = new DifferentialDrive.ChassisState(_linearA, _angularA);
-      this.differentialDriveVelocity = new DifferentialDrive.ChassisState(_linearV, _angularV);
-    }
-
-    public TrajectoryTrackerOutput(Velocity<Length> lV, Acceleration<Length> lA, Velocity<Rotation2d> aV, Acceleration<Rotation2d> aA){
-      this(lV.getValue(), lA.getValue(), aV.getValue(), aA.getValue());
-    }
+  //   public TrajectoryTrackerOutput(Velocity<Length> lV, Acceleration<Length> lA, Velocity<Rotation2d> aV, Acceleration<Rotation2d> aA){
+  //     this(lV.getValue(), lA.getValue(), aV.getValue(), aA.getValue());
+  //   }
 
 
-    public Velocity<Length> getLinearVelocity(){
-      return this.linearV;
-    }
+  //   public Velocity<Length> getLinearVelocity(){
+  //     return this.linearV;
+  //   }
 
-    public Acceleration<Length> getLinearAcceleration(){
-      return this.linearA;
-    }
+  //   public Acceleration<Length> getLinearAcceleration(){
+  //     return this.linearA;
+  //   }
 
-    public Velocity<Rotation2d> getAngularVelocity(){
-      return this.angularV;
-    }
+  //   public Velocity<Rotation2d> getAngularVelocity(){
+  //     return this.angularV;
+  //   }
 
-    public Acceleration<Rotation2d> getAngularAcceleration(){
-      return this.angularA;
-    }
+  //   public Acceleration<Rotation2d> getAngularAcceleration(){
+  //     return this.angularA;
+  //   }
 
-    public ChassisState getDifferentialDriveAcceleration(){
-      return this.differentialDriveAcceleration;
-    }
+  //   public ChassisState getDifferentialDriveAcceleration(){
+  //     return this.differentialDriveAcceleration;
+  //   }
 
-    public ChassisState getDifferentialDriveVelocity(){
-      return this.differentialDriveVelocity;
-    }
-  }
+  //   public ChassisState getDifferentialDriveVelocity(){
+  //     return this.differentialDriveVelocity;
+  //   }
+  // }
 
 }

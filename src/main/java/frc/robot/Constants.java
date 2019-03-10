@@ -13,6 +13,9 @@ public class Constants {
     public static final int kRightEncoderA = 2;
     public static final int kRightEncoderB = 3;
 
+    public static final boolean kLeftEncoderInvert = false;
+    public static final boolean kRightEncoderInvert = false;
+
     public static final Length kWheelDiameter = LengthKt.getInch(6);
 
 }

@@ -81,12 +81,17 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 
     var leftEncoder = new Encoder(Constants.kLeftEncoderA, Constants.kLeftEncoderB, Constants.kLeftEncoderInvert);
     var leftModel = new NativeUnitLengthModel(NativeUnitKt.getNativeUnits(1024), Constants.kWheelDiameter.div(2));
+    var leftPID = new PIDSetting(1, 0, 10, 0);
 
-    lMaster = new EncodedSpark(Constants.kLeftMotor, leftEncoder, model, settings);
+    var rightEncoder = new Encoder(Constants.kRightEncoderA, Constants.kRightEncoderB, Constants.kRightEncoderInvert);
+    var rightModel = new NativeUnitLengthModel(NativeUnitKt.getNativeUnits(1024), Constants.kWheelDiameter.div(2));
+    var rightPID = new PIDSetting(1, 0, 10, 0);
+
+    lMaster = new EncodedSpark(Constants.kLeftMotor, leftEncoder, leftModel, leftPID);
     // lSlave = new EncodedSpark(RobotConfig.leftSlaveMotorPort, leftLengthModel);
     // lSlave.set(ControlMode.Follower, lMaster.getDeviceID());
 
-    rMaster = new EncodedSpark(RobotConfig.rightMasterMotorPort, rightLengthModel, TimeUnitsKt.getMillisecond(10));
+    rMaster = new EncodedSpark(Constants.kRightMotor, rightEncoder, rightModel, rightPID);
     // rSlave = new HalfBakedEncodedPWMMotorController(RobotConfig.rightSlaveMotorPort, rightLengthModel, TimeUnitsKt.getMillisecond(10));
     // rSlave.set(ControlMode.Follower, rMaster.getDeviceID());
 

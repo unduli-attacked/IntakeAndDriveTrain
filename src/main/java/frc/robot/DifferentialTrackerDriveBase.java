@@ -6,15 +6,16 @@ import com.team254.lib.physics.DifferentialDrive.WheelState;
 
 import org.ghrobotics.lib.mathematics.units.LengthKt;
 import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
+import org.ghrobotics.lib.subsystems.drive.TrajectoryTrackerOutput;
 
 import edu.wpi.first.wpilibj.Encoder;
-import frc.robot.TrajectoryTrackerDriveBase.TrajectoryTrackerOutput;
+// import frc.robot.TrajectoryTrackerDriveBase.TrajectoryTrackerOutput;
 
 public interface DifferentialTrackerDriveBase extends TrajectoryTrackerDriveBase{
   DifferentialDrive getDifferentialDrive();
 
-  // @Override
-  default void setOutput(org.ghrobotics.lib.subsystems.drive.TrajectoryTrackerOutput output){
+  @Override
+  default void setOutput(TrajectoryTrackerOutput output){
     setOutputFromDynamics(output.getDifferentialDriveVelocity(), output.getDifferentialDriveAcceleration());
   }
 
