@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PWMSpeedController;
+import frc.robot.Robot.Logger;
 
 public abstract class HalfBakedEncodedPWMMotorController extends PWMSpeedController {
 
@@ -22,15 +23,46 @@ public abstract class HalfBakedEncodedPWMMotorController extends PWMSpeedControl
 		this.encoder = encoder;
 		this.model = model;
 		encoder.setPIDSourceType(PIDSourceType.kRate);
-		controller = new PIDController(settings.kp, settings.ki, settings.kd, encoder, this);
+		controller = new PIDController(settings.kp, settings.ki, settings.kd, encoder, this, 0.01);
+
+		controller.enable();
 	}
 
-	public void setVelocityAndArbitraryFeedForward(Velocity<Length> speed, double arbitraryFeedForward) {
+	public synchronized void setVelocity(Velocity<Length> speed) {
+		setVelocityAndArbitraryFeedForward(speed, 0);
+	}
+
+	public synchronized void setVelocityAndArbitraryFeedForward(Velocity<Length> speed, double arbitraryFeedForward) {
+
+		if(!controller.isEnabled()) controller.enable();
+
+		// Logger.log("setting to speed and arb ff");
+
 		var rawVel = model.toNativeUnitVelocity(speed);
+
+		// Logger.log("raw vel is " + rawVel.getValue() + " with arb ff of " + arbitraryFeedForward);
 
 		controller.setSetpoint(rawVel.getValue());
 
+
+
+		// Logger.log("controller setpoint is " + controller.getSetpoint());
+
+		Logger.log("controller err is " + controller.getError());
+
+		Logger.log("controller is enabled? " + controller.isEnabled());
+
 		arbitraryFeedForwardValue = arbitraryFeedForward;
+	}
+
+	public synchronized void setPercentOutputArbFF(double percent, double arbFF) {
+		this.arbitraryFeedForwardValue = arbFF;
+		if(controller.isEnabled()) controller.disable();
+		set(percent + arbFF);
+	}
+
+	public synchronized void setPercentOutput(double demand) {
+		setPercentOutputArbFF(demand, 0);
 	}
 
 	public Length getDistance() {
@@ -44,7 +76,8 @@ public abstract class HalfBakedEncodedPWMMotorController extends PWMSpeedControl
 	}
 
 	@Override
-	public void pidWrite(double output) {
+	public synchronized void pidWrite(double output) {
+		// System.out.println("setting pwm controller to " + (output + arbitraryFeedForwardValue));
 		set(output + arbitraryFeedForwardValue);
 	}
 

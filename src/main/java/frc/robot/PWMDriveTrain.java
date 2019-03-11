@@ -37,14 +37,6 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 
 	private DifferentialDrive differentialDrive;
 
-	private static final double kVDriveLeftLow = 0.265 * 1d; // Volts per radians per second - Calculated emperically
-	private static final double kADriveLeftLow = 0.027 * 1d; // Volts per radians per second per second TODO tune
-	private static final double kVInterceptLeftLow = 0.95 * 1d; // Volts - tuned!
-
-	private static final double kVDriveRightLow = 0.275 * 1d; // Volts per radians per second - Calculated emperically
-	private static final double kADriveRightLow = 0.0286 * 1d; // Volts per radians per second per second TODO tune
-	private static final double kVInterceptRightLow = 0.96 * 1d; // Volts - tuned!
-
 	// public final DCMotorTransmission leftTransmission;// = new DCMotorTransmission(1 / kVDriveLeftLow,
 	// kWheelRadius * kWheelRadius * kRobotMass / (2.0 * kADriveLeftLow),
 	// kVInterceptLeftLow);
