@@ -2,8 +2,10 @@ package frc.robot;
 
 import org.ghrobotics.lib.mathematics.units.Length;
 import org.ghrobotics.lib.mathematics.units.derivedunits.Velocity;
+import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
+import org.ghrobotics.lib.wrappers.FalconMotor;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
@@ -11,7 +13,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PWMSpeedController;
 import frc.robot.Robot.Logger;
 
-public abstract class HalfBakedEncodedPWMMotorController extends PWMSpeedController {
+public abstract class HalfBakedEncodedPWMMotorController extends PWMSpeedController implements FalconMotor<Length> {
 
 	private Encoder encoder;
 	private NativeUnitLengthModel model;
@@ -69,6 +71,13 @@ public abstract class HalfBakedEncodedPWMMotorController extends PWMSpeedControl
 		var rawDistance = encoder.getDistance();
 		var distance = model.fromNativeUnitPosition(NativeUnitKt.getNativeUnits(rawDistance));
 		return distance;
+	}
+
+	@Override
+	public Velocity<Length> getVelocity() {
+		double ticks = encoder.getRate();
+		var velocity = model.fromNativeUnitVelocity(VelocityKt.getVelocity(NativeUnitKt.getNativeUnits(ticks)));
+		return velocity;
 	}
 
 	public double getRawPos() {
