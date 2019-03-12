@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.commands;
 
 import java.util.function.Supplier;
 
@@ -16,6 +16,8 @@ import org.ghrobotics.lib.subsystems.drive.TrajectoryTrackerOutput;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.DriveTrain;
+import frc.robot.Trajectories;
 
 // @SuppressWarnings({"WeakerAccess", "unused"})
 public class TrajectoryTrackerCommand extends Command {

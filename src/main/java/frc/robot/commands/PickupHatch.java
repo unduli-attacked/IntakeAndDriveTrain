@@ -1,15 +1,8 @@
-package frc.robot.commands.auto.groups;
+package frc.robot.commands;
 
 import org.ghrobotics.lib.mathematics.units.LengthKt;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.commands.subsystems.drivetrain.DriveDistanceTheSecond;
-import frc.robot.commands.subsystems.drivetrain.FollowVisionTargetTheSecond;
-import frc.robot.commands.subsystems.superstructure.RunIntake;
-import frc.robot.commands.subsystems.superstructure.SuperstructureGoToState;
-import frc.robot.subsystems.LimeLight;
-import frc.robot.subsystems.LimeLight.PipelinePreset;
-import frc.robot.subsystems.superstructure.SuperStructure.iPosition;
 
 public class PickupHatch extends CommandGroup {
 
