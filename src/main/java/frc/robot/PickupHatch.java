@@ -35,11 +35,11 @@ public class PickupHatch extends CommandGroup {
 		// new WaitCommand(0.75),
 		// new RunIntake(1, 0, 0.5))));
 
-		addParallel(new DriveDistanceTheSecond(LengthKt.getFeet(0.5), false)); // TODO run the next spline, saves time, vs backing up
+		// addParallel(new DriveDistanceTheSecond(LengthKt.getFeet(0.5), false)); // TODO run the next spline, saves time, vs backing up
 
-		addSequential(new RunIntake(1, 0, .5));
+		addSequential(new RunIntake(1, .5));
 
-		addSequential(new DriveDistanceTheSecond(LengthKt.getFeet(1), true)); // TODO run the next spline, saves time, vs backing up
+		// addSequential(new DriveDistanceTheSecond(LengthKt.getFeet(1), true)); // TODO run the next spline, saves time, vs backing up
 
 		// addSequential(new LimeLight.SetLEDs(LimeLight.LEDMode.kOFF));
 
