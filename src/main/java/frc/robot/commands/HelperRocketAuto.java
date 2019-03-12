@@ -1,7 +1,14 @@
 package frc.robot.commands;
 
-public class HelperRocketAuto {
+import edu.wpi.first.wpilibj.command.Command;
+
+public class HelperRocketAuto extends Command {
 	public HelperRocketAuto() {
 
+	}
+
+	@Override
+	protected boolean isFinished() {
+		return false;
 	}
 }

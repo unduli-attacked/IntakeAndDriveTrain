@@ -15,7 +15,12 @@ import com.team254.lib.physics.DifferentialDrive;
 public class RobotConfig {
 	public static final int intakePort = 0;
 	public static final int intakeJoystickPort = 0;
-	public static final int intakeJoystickAxis = 0;
+	public static final int intakeJoystickAxis = 5; //the stick that controls the intake. should be a y
+
+	public static final int driveTrainJoystickPort = 1;
+	public static final int runHelperButton = 3;
+	public static final int forwardAxis = 1;
+	public static final int turnAxis = 0;
 
 	public static final int leftMasterMotorPort = 1;
 	public static final int leftSlaveMotorPort = 2;
