@@ -12,8 +12,8 @@ public class TeleopDriving extends Command{
 
     // DriveTrain drivetrain = DriveTrain.getInstance();
     // Subsystem dt = drivetrain.getWpiSubsystem();
-    PWMDriveTrain drivetrain = PWMDriveTrain.getInstance();
-    PWMDriveTrain dt = drivetrain;
+    PWMDriveTrain drivetrain;// = PWMDriveTrain.getInstance();
+    // PWMDriveTrain dt = drivetrain;
 
     public static enum DriveType{
         TANK, ARCADE, CURVATURE;
@@ -21,8 +21,9 @@ public class TeleopDriving extends Command{
 
     DriveType type = DriveType.ARCADE;
     public TeleopDriving(DriveType type) {
-        requires(dt);
+        requires(drivetrain.getInstance());
         this.type = type;
+        drivetrain = PWMDriveTrain.getInstance();
     }
 
     @Override
