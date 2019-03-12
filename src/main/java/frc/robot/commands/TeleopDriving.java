@@ -10,9 +10,10 @@ import frc.robot.PWMDriveTrain;
 
 public class TeleopDriving extends Command{
 
-    
-    DriveTrain drivetrain = DriveTrain.getInstance();
-    // PWMDriveTrain drivetrain = PWMDriveTrain.getInstance();
+    // DriveTrain drivetrain = DriveTrain.getInstance();
+    // Subsystem dt = drivetrain.getWpiSubsystem();
+    PWMDriveTrain drivetrain = PWMDriveTrain.getInstance();
+    PWMDriveTrain dt = drivetrain;
 
     public static enum DriveType{
         TANK, ARCADE, CURVATURE;
@@ -20,7 +21,7 @@ public class TeleopDriving extends Command{
 
     DriveType type = DriveType.ARCADE;
     public TeleopDriving(DriveType type) {
-        requires(drivetrain.getWpiSubsystem());
+        requires(dt);
         this.type = type;
     }
 

@@ -13,6 +13,8 @@ import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.team254.lib.physics.DifferentialDrive;
+import com.team254.lib.physics.DifferentialDrive.ChassisState;
+import com.team254.lib.physics.DifferentialDrive.WheelState;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
@@ -33,7 +35,7 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 	public AHRS gyro = new AHRS(SPI.Port.kMXP);
 	double gyroZero;
 
-	private static DriveTrain inst;
+	private static PWMDriveTrain inst;
 
 	private DifferentialDrive differentialDrive;
 
@@ -112,9 +114,9 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 		return localization;
 	}
 
-	public static DriveTrain getInstance() {
+	public static PWMDriveTrain getInstance() {
 		if (inst == null)
-			inst = new DriveTrain();
+			inst = new PWMDriveTrain();
 		return inst;
 	}
 
@@ -167,5 +169,70 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 	// public void setOutput(TrajectoryTrackerOutput output) {
 
 	// }
+
+
+	public void tankDrive(double leftPercent, double rightPercent){
+		//TODO do we want deadbanding?
+
+		getLeftMotor().set(leftPercent);
+		getRightMotor().set(rightPercent);
+	}
+
+	public void arcadeDrive(double linearPercent, double rotationPercent, boolean squareInputs) {
+		// linearPercent = Util.limit(linearPercent, 1);
+		// linearPercent = Util.deadband(linearPercent, 0.02);
+
+		// rotationPercent = Util.limit(rotationPercent, 1);
+		// rotationPercent = Util.deadband(rotationPercent, 0.02);
+
+		// Square the inputs (while preserving the sign) to increase fine control
+		// while permitting full power.
+		if (squareInputs) {
+			linearPercent = Math.copySign(linearPercent * linearPercent, linearPercent);
+			rotationPercent = Math.copySign(rotationPercent * rotationPercent, rotationPercent);
+		}
+
+		double leftMotorOutput;
+		double rightMotorOutput;
+
+		double maxInput = Math.copySign(Math.max(Math.abs(linearPercent), Math.abs(rotationPercent)), linearPercent);
+
+		if (linearPercent >= 0.0) {
+			// First quadrant, else second quadrant
+			if (rotationPercent >= 0.0) {
+				leftMotorOutput = maxInput;
+				rightMotorOutput = linearPercent - rotationPercent;
+			} else {
+				leftMotorOutput = linearPercent + rotationPercent;
+				rightMotorOutput = maxInput;
+			}
+		} else {
+			// Third quadrant, else fourth quadrant
+			if (rotationPercent >= 0.0) {
+				leftMotorOutput = linearPercent + rotationPercent;
+				rightMotorOutput = maxInput;
+			} else {
+				leftMotorOutput = maxInput;
+				rightMotorOutput = linearPercent - rotationPercent;
+			}
+		}
+		// Logger.log("Linear input " + linearPercent + " turn input " +
+		// rotationPercent);
+		// Logger.log("left motor output " + leftMotorOutput + " right motor output " +
+		// rightMotorOutput);
+
+		ChassisState mTarget = new ChassisState(linearPercent * 6, -1 * rotationPercent * 6);
+
+		WheelState mCalced = getDifferentialDrive().solveInverseKinematics(mTarget);
+
+		double left = mCalced.get(true);
+
+		double right = mCalced.get(false);
+
+		// tankDrive(left/12, right/12);
+
+		tankDrive(leftMotorOutput, rightMotorOutput);
+		// tankDrive(0.2, 0.2);
+	}
 
 }
