@@ -14,10 +14,13 @@ import org.ghrobotics.lib.subsystems.drive.TankDriveSubsystem;
 import org.ghrobotics.lib.wrappers.ctre.FalconSRX;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 import com.team254.lib.physics.DifferentialDrive;
 
 import edu.wpi.first.wpilibj.SPI;
+import frc.robot.commands.TeleopDriving;
+import frc.robot.commands.TeleopDriving.DriveType;
 
 public class DriveTrain extends TankDriveSubsystem {
 
@@ -107,5 +110,12 @@ public class DriveTrain extends TankDriveSubsystem {
 		getLeftMotor().set(ControlMode.PercentOutput, 0);
 		getRightMotor().set(ControlMode.PercentOutput, 0);
 	}
+
+	public void setNeutralMode(NeutralMode mode) {
+		getLeftMotor().setNeutralMode(mode);
+		getRightMotor().setNeutralMode(mode);
+	}
+
+	//FIXME so there's no initDefaultCommand for TankDriveSubsystem
 
 }
