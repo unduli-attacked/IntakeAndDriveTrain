@@ -21,9 +21,9 @@ public class TeleopDriving extends Command{
 
     DriveType type = DriveType.ARCADE;
     public TeleopDriving(DriveType type) {
-        requires(drivetrain.getInstance());
+        requires(drivetrain.getWpiSubsystem());
         this.type = type;
-        drivetrain = PWMDriveTrain.getInstance();
+        // drivetrain = PWMDriveTrain.getInstance();
     }
 
     @Override

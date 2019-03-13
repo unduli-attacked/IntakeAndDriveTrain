@@ -10,9 +10,9 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.Encoder;
 
-public class EncodedVictor extends HalfBakedEncodedPWMMotorController {
+public class EncodedVictorSP extends HalfBakedEncodedPWMMotorController {
 
-	public EncodedVictor(int channel, Encoder encoder, NativeUnitLengthModel model, PIDSetting settings) {
+	public EncodedVictorSP(int channel, Encoder encoder, NativeUnitLengthModel model, PIDSetting settings) {
 
 		super(channel, encoder, model, settings);
 
@@ -21,8 +21,8 @@ public class EncodedVictor extends HalfBakedEncodedPWMMotorController {
 		setSpeed(0.0);
 		setZeroLatch();
 
-		HAL.report(tResourceType.kResourceType_RevSPARK, getChannel());
-		setName("Spark", getChannel());
+		HAL.report(tResourceType.kResourceType_VictorSP, getChannel());
+		setName("VictorSP", getChannel());
 
 	}
 
