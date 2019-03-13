@@ -1,12 +1,13 @@
 package frc.robot;
 
+import org.ghrobotics.lib.mathematics.units.LengthKt;
+import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
+
 import edu.wpi.first.hal.sim.DriverStationSim;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.ghrobotics.lib.mathematics.units.LengthKt;
-import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
 
 /**
  * Main robot class. There shouldn't be a *ton* of stuff here, mostly init
@@ -30,7 +31,6 @@ public class Robot extends TimedRobot {
 		startingPos.setDefaultOption("Center", "M");
 		startingPos.addOption("Left", "L");
 		startingPos.addOption("Right", "R");
-
 
 		Logger.log("robot program starttttting");
 		sim.setEnabled(true);
@@ -68,7 +68,6 @@ public class Robot extends TimedRobot {
 
 		drive.getLeftMotor().setVelocityAndArbitraryFeedForward(VelocityKt.getVelocity(LengthKt.getFeet(2)), 0.1);
 
-		
 	}
 
 	/**
@@ -91,14 +90,13 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData(startingPos);
 		// Logger.log("Is the robot enabled? " + sim.getEnabled());
 
-
 	}
-
 
 	public static class Logger {
 		public static void log(Object o) {
 			System.out.println(o);
 		}
+
 		public static void log(String thing) {
 			System.out.println(thing);
 		}

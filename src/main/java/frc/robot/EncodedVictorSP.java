@@ -1,7 +1,5 @@
 package frc.robot;
 
-import org.ghrobotics.lib.mathematics.units.Length;
-import org.ghrobotics.lib.mathematics.units.derivedunits.Velocity;
 import org.ghrobotics.lib.mathematics.units.derivedunits.Volt;
 import org.ghrobotics.lib.mathematics.units.derivedunits.VoltKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
@@ -16,7 +14,7 @@ public class EncodedVictorSP extends HalfBakedEncodedPWMMotorController {
 
 		super(channel, encoder, model, settings);
 
-		setBounds(2.004,  1.52, 1.50, 1.48, .997);
+		setBounds(2.004, 1.52, 1.50, 1.48, .997);
 		setPeriodMultiplier(PeriodMultiplier.k1X);
 		setSpeed(0.0);
 		setZeroLatch();

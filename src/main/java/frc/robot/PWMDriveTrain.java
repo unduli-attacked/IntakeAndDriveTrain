@@ -14,8 +14,6 @@ import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 import com.team254.lib.physics.DifferentialDrive;
-import com.team254.lib.physics.DifferentialDrive.ChassisState;
-import com.team254.lib.physics.DifferentialDrive.WheelState;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
@@ -173,7 +171,7 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 	// }
 
 	@Override
-	public void tankDrive(double leftPercent, double rightPercent){
+	public void tankDrive(double leftPercent, double rightPercent) {
 		//TODO do we want deadbanding?
 
 		getLeftMotor().set(leftPercent);

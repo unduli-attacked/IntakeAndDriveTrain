@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import org.ghrobotics.lib.mathematics.units.LengthKt;
-
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class PickupHatch extends CommandGroup {
@@ -18,11 +16,9 @@ public class PickupHatch extends CommandGroup {
 
 		// addSequential(new LimeLight.setPipeline(PipelinePreset.k3dVision));
 
-
 		// addSequential(new FollowVisionTargetTheSecond(8)); // in high res mode
 
 		// ======================================================================
-
 
 		// addSequential(SequentialCommandFactory.getSequentialCommands(Arrays.asList(
 		// new WaitCommand(0.75),

@@ -20,10 +20,8 @@ import com.team254.lib.physics.DifferentialDrive;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.commands.TeleopDriving;
-import frc.robot.commands.TeleopDriving.DriveType;
 
-public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<FalconSRX<Length>>{
+public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<FalconSRX<Length>> {
 
 	FalconSRX<Length> lMaster, rMaster, lSlave, rSlave;
 	public static final NativeUnitLengthModel leftLengthModel = new NativeUnitLengthModel(RobotConfig.driveTrainUnitsPerRot, RobotConfig.leftWheelRadius);

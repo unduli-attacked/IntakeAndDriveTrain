@@ -5,31 +5,27 @@ import com.team254.lib.physics.DifferentialDrive;
 import com.team254.lib.physics.DifferentialDrive.ChassisState;
 import com.team254.lib.physics.DifferentialDrive.WheelState;
 
-import org.ghrobotics.lib.mathematics.units.Length;
-import org.ghrobotics.lib.wrappers.FalconMotor;
-import org.ghrobotics.lib.wrappers.ctre.FalconSRX;
-
 import edu.wpi.first.wpilibj.command.Subsystem;
 import kotlin.ranges.RangesKt;
 
 public interface DriveTrainBase<T> {
 
-    public Subsystem getRealSubsystem();
+	public Subsystem getRealSubsystem();
 
-    public void setNeutralMode(NeutralMode mode);
+	public void setNeutralMode(NeutralMode mode);
 
-    public void tankDrive(double leftPercent, double rightPercent);
+	public void tankDrive(double leftPercent, double rightPercent);
 
-    public T getLeftMotor();
+	public T getLeftMotor();
 
-    public T getRightMotor();
+	public T getRightMotor();
 
 	public default void arcadeDrive(double linearPercent, double rotationPercent, boolean squareInputs) {
 		linearPercent = Math.min(1, Math.max(-1, linearPercent));
-        linearPercent = (Math.abs(linearPercent) < 0.02) ? 0 : linearPercent;
+		linearPercent = (Math.abs(linearPercent) < 0.02) ? 0 : linearPercent;
 
-        rotationPercent = Math.min(1, Math.max(-1, rotationPercent));
-        rotationPercent = (Math.abs(rotationPercent) < 0.02) ? 0 : rotationPercent;
+		rotationPercent = Math.min(1, Math.max(-1, rotationPercent));
+		rotationPercent = (Math.abs(rotationPercent) < 0.02) ? 0 : rotationPercent;
 
 		// Square the inputs (while preserving the sign) to increase fine control
 		// while permitting full power.
@@ -75,15 +71,15 @@ public interface DriveTrainBase<T> {
 
 		tankDrive(leftMotorOutput, rightMotorOutput);
 		// tankDrive(0.2, 0.2);
-    }
+	}
 
-    public default void curvatureDrive(double linearPercent, double curvaturePercent, boolean isQuickTurn) {
+	public default void curvatureDrive(double linearPercent, double curvaturePercent, boolean isQuickTurn) {
 		double angularPower;
-        boolean overPower;
-        
-        double kQuickStopThreshold = 0.2;// DifferentialDrive.kDefaultQuickStopThreshold;
-	    double kQuickStopAlpha = 0.1;// DifferentialDrive.kDefaultQuickStopAlpha;
-	    double quickStopAccumulator = 0;
+		boolean overPower;
+
+		double kQuickStopThreshold = 0.2;// DifferentialDrive.kDefaultQuickStopThreshold;
+		double kQuickStopAlpha = 0.1;// DifferentialDrive.kDefaultQuickStopAlpha;
+		double quickStopAccumulator = 0;
 
 		if (isQuickTurn) {
 			if (Math.abs(linearPercent) < kQuickStopThreshold) {
@@ -136,9 +132,9 @@ public interface DriveTrainBase<T> {
 		tankDrive(leftMotorOutput, rightMotorOutput);
 	}
 
-    public DifferentialDrive getDifferentialDrive();
+	public DifferentialDrive getDifferentialDrive();
 
-    public default void stop() {
-		tankDrive(0,0);
+	public default void stop() {
+		tankDrive(0, 0);
 	}
 }

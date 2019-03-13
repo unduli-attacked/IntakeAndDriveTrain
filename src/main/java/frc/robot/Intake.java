@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -36,8 +35,7 @@ public class Intake extends Subsystem {
 
 	public class IntakeTeleop extends Command {
 
-		public IntakeTeleop() {
-		}
+		public IntakeTeleop() {}
 
 		@Override
 		protected void execute() {

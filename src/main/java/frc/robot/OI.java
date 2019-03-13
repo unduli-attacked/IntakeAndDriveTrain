@@ -6,24 +6,24 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.HelperRocketAuto;
 
 public class OI {
-    private static Joystick drive = new Joystick(RobotConfig.driveTrainJoystickPort);
-    private static Joystick intake = new Joystick(RobotConfig.intakeJoystickPort);
+	private static Joystick drive = new Joystick(RobotConfig.driveTrainJoystickPort);
+	private static Joystick intake = new Joystick(RobotConfig.intakeJoystickPort);
 
-    private Button runHelperButton = new JoystickButton(drive, RobotConfig.runHelperButton);
-    
-    public OI(){
-        runHelperButton.whenPressed(new HelperRocketAuto());
-    }
+	private Button runHelperButton = new JoystickButton(drive, RobotConfig.runHelperButton);
 
-    public static double getForwardAxis(){
-        return -1*drive.getRawAxis(RobotConfig.forwardAxis);
-    }
+	public OI() {
+		runHelperButton.whenPressed(new HelperRocketAuto());
+	}
 
-    public static double getTurnAxis(){
-        return drive.getRawAxis(RobotConfig.turnAxis);
-    }
+	public static double getForwardAxis() {
+		return -1 * drive.getRawAxis(RobotConfig.forwardAxis);
+	}
 
-    public static double getIntakeAxis(){
-        return intake.getRawAxis(RobotConfig.intakeJoystickAxis);
-    }
+	public static double getTurnAxis() {
+		return drive.getRawAxis(RobotConfig.turnAxis);
+	}
+
+	public static double getIntakeAxis() {
+		return intake.getRawAxis(RobotConfig.intakeJoystickAxis);
+	}
 }

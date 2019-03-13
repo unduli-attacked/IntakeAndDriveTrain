@@ -1,13 +1,13 @@
 package frc.robot;
 
-import com.ctre.phoenix.ErrorCode;
-
 import org.ghrobotics.lib.mathematics.units.Length;
 import org.ghrobotics.lib.mathematics.units.derivedunits.Velocity;
 import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
 import org.ghrobotics.lib.wrappers.FalconMotor;
+
+import com.ctre.phoenix.ErrorCode;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
@@ -38,7 +38,8 @@ public abstract class HalfBakedEncodedPWMMotorController extends PWMSpeedControl
 
 	public synchronized void setVelocityAndArbitraryFeedForward(Velocity<Length> speed, double arbitraryFeedForward) {
 
-		if(!controller.isEnabled()) controller.enable();
+		if (!controller.isEnabled())
+			controller.enable();
 
 		// Logger.log("setting to speed and arb ff");
 
@@ -47,8 +48,6 @@ public abstract class HalfBakedEncodedPWMMotorController extends PWMSpeedControl
 		// Logger.log("raw vel is " + rawVel.getValue() + " with arb ff of " + arbitraryFeedForward);
 
 		controller.setSetpoint(rawVel.getValue());
-
-
 
 		// Logger.log("controller setpoint is " + controller.getSetpoint());
 
@@ -61,7 +60,8 @@ public abstract class HalfBakedEncodedPWMMotorController extends PWMSpeedControl
 
 	public synchronized void setPercentOutputArbFF(double percent, double arbFF) {
 		this.arbitraryFeedForwardValue = arbFF;
-		if(controller.isEnabled()) controller.disable();
+		if (controller.isEnabled())
+			controller.disable();
 		set(percent + arbFF);
 	}
 
