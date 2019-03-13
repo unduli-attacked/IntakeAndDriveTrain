@@ -11,6 +11,7 @@ import org.ghrobotics.lib.mathematics.units.Rotation2dKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
 import com.team254.lib.physics.DifferentialDrive;
 import com.team254.lib.physics.DifferentialDrive.ChassisState;
@@ -20,7 +21,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDriveBase {
+public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDriveBase, DriveTrainBase<HalfBakedEncodedPWMMotorController> {
 
 	EncodedSpark lMaster, rMaster;//, lSlave, rSlave;
 	public static final NativeUnitLengthModel leftLengthModel = new NativeUnitLengthModel(RobotConfig.driveTrainUnitsPerRot, RobotConfig.leftWheelRadius);
@@ -120,6 +121,7 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 		return inst;
 	}
 
+	@Override
 	public void stop() {
 		getLeftMotor().set(0);
 		getRightMotor().set(0);
@@ -170,7 +172,7 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 
 	// }
 
-
+	@Override
 	public void tankDrive(double leftPercent, double rightPercent){
 		//TODO do we want deadbanding?
 
@@ -178,61 +180,14 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 		getRightMotor().set(rightPercent);
 	}
 
-	public void arcadeDrive(double linearPercent, double rotationPercent, boolean squareInputs) {
-		// linearPercent = Util.limit(linearPercent, 1);
-		// linearPercent = Util.deadband(linearPercent, 0.02);
+	@Override
+	public Subsystem getRealSubsystem() {
+		return this;
+	}
 
-		// rotationPercent = Util.limit(rotationPercent, 1);
-		// rotationPercent = Util.deadband(rotationPercent, 0.02);
-
-		// Square the inputs (while preserving the sign) to increase fine control
-		// while permitting full power.
-		if (squareInputs) {
-			linearPercent = Math.copySign(linearPercent * linearPercent, linearPercent);
-			rotationPercent = Math.copySign(rotationPercent * rotationPercent, rotationPercent);
-		}
-
-		double leftMotorOutput;
-		double rightMotorOutput;
-
-		double maxInput = Math.copySign(Math.max(Math.abs(linearPercent), Math.abs(rotationPercent)), linearPercent);
-
-		if (linearPercent >= 0.0) {
-			// First quadrant, else second quadrant
-			if (rotationPercent >= 0.0) {
-				leftMotorOutput = maxInput;
-				rightMotorOutput = linearPercent - rotationPercent;
-			} else {
-				leftMotorOutput = linearPercent + rotationPercent;
-				rightMotorOutput = maxInput;
-			}
-		} else {
-			// Third quadrant, else fourth quadrant
-			if (rotationPercent >= 0.0) {
-				leftMotorOutput = linearPercent + rotationPercent;
-				rightMotorOutput = maxInput;
-			} else {
-				leftMotorOutput = maxInput;
-				rightMotorOutput = linearPercent - rotationPercent;
-			}
-		}
-		// Logger.log("Linear input " + linearPercent + " turn input " +
-		// rotationPercent);
-		// Logger.log("left motor output " + leftMotorOutput + " right motor output " +
-		// rightMotorOutput);
-
-		ChassisState mTarget = new ChassisState(linearPercent * 6, -1 * rotationPercent * 6);
-
-		WheelState mCalced = getDifferentialDrive().solveInverseKinematics(mTarget);
-
-		double left = mCalced.get(true);
-
-		double right = mCalced.get(false);
-
-		// tankDrive(left/12, right/12);
-
-		tankDrive(leftMotorOutput, rightMotorOutput);
-		// tankDrive(0.2, 0.2);
+	@Override
+	public void setNeutralMode(NeutralMode mode) {
+		//FIXME i guess dont?????
 	}
 
 }

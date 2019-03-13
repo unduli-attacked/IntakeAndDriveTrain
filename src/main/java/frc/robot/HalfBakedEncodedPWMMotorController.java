@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix.ErrorCode;
+
 import org.ghrobotics.lib.mathematics.units.Length;
 import org.ghrobotics.lib.mathematics.units.derivedunits.Velocity;
 import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
@@ -88,6 +90,11 @@ public abstract class HalfBakedEncodedPWMMotorController extends PWMSpeedControl
 	public synchronized void pidWrite(double output) {
 		// System.out.println("setting pwm controller to " + (output + arbitraryFeedForwardValue));
 		set(output + arbitraryFeedForwardValue);
+	}
+
+	public ErrorCode configOpenloopRamp(double d) {
+		return null;
+		//FIXME this is fine
 	}
 
 }

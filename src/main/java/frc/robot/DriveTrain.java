@@ -19,10 +19,11 @@ import com.kauailabs.navx.frc.AHRS;
 import com.team254.lib.physics.DifferentialDrive;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.commands.TeleopDriving;
 import frc.robot.commands.TeleopDriving.DriveType;
 
-public class DriveTrain extends TankDriveSubsystem {
+public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<FalconSRX<Length>>{
 
 	FalconSRX<Length> lMaster, rMaster, lSlave, rSlave;
 	public static final NativeUnitLengthModel leftLengthModel = new NativeUnitLengthModel(RobotConfig.driveTrainUnitsPerRot, RobotConfig.leftWheelRadius);
@@ -114,6 +115,11 @@ public class DriveTrain extends TankDriveSubsystem {
 	public void setNeutralMode(NeutralMode mode) {
 		getLeftMotor().setNeutralMode(mode);
 		getRightMotor().setNeutralMode(mode);
+	}
+
+	@Override
+	public Subsystem getRealSubsystem() {
+		return this.getWpiSubsystem();
 	}
 
 	//FIXME so there's no initDefaultCommand for TankDriveSubsystem

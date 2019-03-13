@@ -2,18 +2,21 @@ package frc.robot.commands;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import org.ghrobotics.lib.wrappers.ctre.FalconSRX;
+
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.DriveTrain;
+import frc.robot.DriveTrainBase;
+import frc.robot.HalfBakedEncodedPWMMotorController;
 import frc.robot.OI;
 import frc.robot.PWMDriveTrain;
 
 public class TeleopDriving extends Command{
 
-    DriveTrain drivetrain = DriveTrain.getInstance();
-    // Subsystem dt = drivetrain.getWpiSubsystem();
-    // PWMDriveTrain drivetrain;// = PWMDriveTrain.getInstance();
-    // // PWMDriveTrain dt = drivetrain;
+    //TODO uncomment one of these based on the drivetrain type
+    DriveTrainBase<HalfBakedEncodedPWMMotorController> drivetrain = PWMDriveTrain.getInstance();
+    // DriveTrainBase<FalconSRX<Length>> drivetrain = DriveTrain.getInstance();
 
     public static enum DriveType{
         TANK, ARCADE, CURVATURE;
@@ -21,9 +24,8 @@ public class TeleopDriving extends Command{
 
     DriveType type = DriveType.ARCADE;
     public TeleopDriving(DriveType type) {
-        requires(drivetrain.getWpiSubsystem());
+        requires(drivetrain.getRealSubsystem());
         this.type = type;
-        // drivetrain = PWMDriveTrain.getInstance();
     }
 
     @Override
@@ -46,7 +48,7 @@ public class TeleopDriving extends Command{
                 drivetrain.tankDrive(arg1, arg2);
             case ARCADE:
                 drivetrain.arcadeDrive(arg1 * 1,
-                    arg2 * 1);
+                    arg2 * 1, true);
             case CURVATURE:
                 boolean isQuickTurn = false; //FIXME help i forgot how this was done
                 drivetrain.curvatureDrive(arg1, arg2, isQuickTurn);
