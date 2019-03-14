@@ -5,9 +5,12 @@ import org.ghrobotics.lib.mathematics.units.derivedunits.VelocityKt;
 
 import edu.wpi.first.hal.sim.DriverStationSim;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.TeleopDriving;
+import frc.robot.commands.TeleopDriving.DriveType;
 
 /**
  * Main robot class. There shouldn't be a *ton* of stuff here, mostly init
@@ -21,6 +24,8 @@ public class Robot extends TimedRobot {
 	DriverStationSim sim = new DriverStationSim();
 
 	public static PWMDriveTrain drive = new PWMDriveTrain();
+	private static Command currentDriveCommand;
+	public static OI oi;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -35,6 +40,7 @@ public class Robot extends TimedRobot {
 		Logger.log("robot program starttttting");
 		sim.setEnabled(true);
 
+		oi = new OI();
 	}
 
 	/**
@@ -56,6 +62,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopInit() {
 		Logger.log("hulllllllo there");
+		currentDriveCommand = new TeleopDriving(DriveType.ARCADE);
+		currentDriveCommand.start(); //what is a default command
 	}
 
 	/**
@@ -89,6 +97,12 @@ public class Robot extends TimedRobot {
 	public void robotPeriodic() {
 		SmartDashboard.putData(startingPos);
 		// Logger.log("Is the robot enabled? " + sim.getEnabled());
+
+		if(Math.abs(oi.getForwardAxis()) > 0.5 || Math.abs(oi.getForwardAxis()) > 0.5){
+			//break out of the auto command if the operator tries to take control
+			currentDriveCommand = new TeleopDriving(DriveType.ARCADE);
+			currentDriveCommand.start();
+		}
 
 	}
 

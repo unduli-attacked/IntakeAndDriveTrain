@@ -7,6 +7,7 @@ import frc.robot.lib.drivebases.DriveTrainBase;
 import frc.robot.lib.HalfBakedEncodedPWMMotorController;
 import frc.robot.OI;
 import frc.robot.PWMDriveTrain;
+import frc.robot.Robot;
 
 public class TeleopDriving extends Command {
 
@@ -36,8 +37,8 @@ public class TeleopDriving extends Command {
 
 	@Override
 	protected void execute() {
-		double arg1 = OI.getForwardAxis();
-		double arg2 = OI.getTurnAxis();
+		double arg1 = Robot.oi.getForwardAxis();
+		double arg2 = Robot.oi.getTurnAxis();
 
 		switch (type) {
 		case TANK:

@@ -39,7 +39,7 @@ public class Intake extends Subsystem {
 
 		@Override
 		protected void execute() {
-			Intake.getInstance().setSpeed(OI.getIntakeAxis());
+			Intake.getInstance().setSpeed(Robot.oi.getIntakeAxis());
 		}
 
 		@Override

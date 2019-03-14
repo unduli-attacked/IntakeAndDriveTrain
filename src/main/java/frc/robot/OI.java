@@ -15,15 +15,15 @@ public class OI {
 		runHelperButton.whenPressed(new HelperRocketAuto());
 	}
 
-	public static double getForwardAxis() {
+	public double getForwardAxis() {
 		return -1 * drive.getRawAxis(RobotConfig.forwardAxis);
 	}
 
-	public static double getTurnAxis() {
+	public double getTurnAxis() {
 		return drive.getRawAxis(RobotConfig.turnAxis);
 	}
 
-	public static double getIntakeAxis() {
+	public double getIntakeAxis() {
 		return intake.getRawAxis(RobotConfig.intakeJoystickAxis);
 	}
 }
