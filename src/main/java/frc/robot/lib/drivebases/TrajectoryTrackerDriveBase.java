@@ -1,8 +1,10 @@
-package frc.robot;
+package frc.robot.lib.drivebases;
 
 import org.ghrobotics.lib.mathematics.twodim.control.TrajectoryTracker;
 import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2d;
 import org.ghrobotics.lib.subsystems.drive.TrajectoryTrackerOutput;
+
+import frc.robot.lib.HalfBakedEncodedPWMMotorController;
 
 public interface TrajectoryTrackerDriveBase {
 	HalfBakedEncodedPWMMotorController getLeftMotor();

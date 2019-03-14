@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.lib;
 
 import org.ghrobotics.lib.mathematics.units.Length;
 import org.ghrobotics.lib.mathematics.units.derivedunits.Velocity;

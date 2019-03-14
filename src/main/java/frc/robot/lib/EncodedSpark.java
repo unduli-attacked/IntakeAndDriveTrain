@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.lib;
 
 import org.ghrobotics.lib.mathematics.units.derivedunits.Volt;
 import org.ghrobotics.lib.mathematics.units.derivedunits.VoltKt;
@@ -8,19 +8,19 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.Encoder;
 
-public class EncodedVictorSP extends HalfBakedEncodedPWMMotorController {
+public class EncodedSpark extends HalfBakedEncodedPWMMotorController {
 
-	public EncodedVictorSP(int channel, Encoder encoder, NativeUnitLengthModel model, PIDSetting settings) {
+	public EncodedSpark(int channel, Encoder encoder, NativeUnitLengthModel model, PIDSetting settings) {
 
 		super(channel, encoder, model, settings);
 
-		setBounds(2.004, 1.52, 1.50, 1.48, .997);
+		setBounds(2.003, 1.55, 1.50, 1.46, .999);
 		setPeriodMultiplier(PeriodMultiplier.k1X);
 		setSpeed(0.0);
 		setZeroLatch();
 
-		HAL.report(tResourceType.kResourceType_VictorSP, getChannel());
-		setName("VictorSP", getChannel());
+		HAL.report(tResourceType.kResourceType_RevSPARK, getChannel());
+		setName("Spark", getChannel());
 
 	}
 

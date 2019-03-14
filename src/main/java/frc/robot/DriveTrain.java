@@ -20,6 +20,7 @@ import com.team254.lib.physics.DifferentialDrive;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.lib.drivebases.DriveTrainBase;
 
 public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<FalconSRX<Length>> {
 
