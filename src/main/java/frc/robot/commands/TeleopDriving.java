@@ -12,8 +12,8 @@ import frc.robot.Robot;
 public class TeleopDriving extends Command {
 
 	//TODO uncomment one of these based on the drivetrain type
-	DriveTrainBase<HalfBakedEncodedPWMMotorController> drivetrain = PWMDriveTrain.getInstance();
-	// DriveTrainBase<FalconSRX<Length>> drivetrain = DriveTrain.getInstance();
+	public static DriveTrainBase<HalfBakedEncodedPWMMotorController> drivetrain = PWMDriveTrain.getInstance();
+	// public static DriveTrainBase<FalconSRX<Length>> drivetrain = DriveTrain.getInstance();
 
 	public static enum DriveType {
 		TANK, ARCADE, CURVATURE;

@@ -5,6 +5,8 @@ import org.ghrobotics.lib.localization.TankEncoderLocalization;
 import org.ghrobotics.lib.mathematics.twodim.control.RamseteTracker;
 import org.ghrobotics.lib.mathematics.twodim.control.TrajectoryTracker;
 import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2d;
+import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2dWithCurvature;
+import org.ghrobotics.lib.mathematics.twodim.trajectory.types.TimedTrajectory;
 import org.ghrobotics.lib.mathematics.units.Length;
 import org.ghrobotics.lib.mathematics.units.Rotation2d;
 import org.ghrobotics.lib.mathematics.units.Rotation2dKt;
@@ -20,6 +22,7 @@ import com.team254.lib.physics.DifferentialDrive;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.commands.TrajectoryTrackerCommand;
 import frc.robot.lib.drivebases.DriveTrainBase;
 
 public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<FalconSRX<Length>> {
@@ -39,6 +42,11 @@ public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<Fal
 
 	private static DriveTrain inst;
 
+
+	public static enum Gear{
+		LOW, HIGH;
+	}
+
 	protected DriveTrain() {
 		lMaster = new FalconSRX<Length>(RobotConfig.leftMasterMotorPort, leftLengthModel, TimeUnitsKt.getMillisecond(10));
 		lSlave = new FalconSRX<Length>(RobotConfig.leftSlaveMotorPort, leftLengthModel, TimeUnitsKt.getMillisecond(10));
@@ -56,6 +64,20 @@ public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<Fal
 
 		/* set the robot pose to 0,0,0 */
 		localization.reset(new Pose2d());
+	}
+
+
+	/**
+	 * Get a command to follow a trajectory given a path and an option to reset
+	 * odometry
+	 * 
+	 * @param trajectory to follow
+	 * @param reset      if we should reset robot odometry to the initial pose or
+	 *                   not
+	 */
+	public TrajectoryTrackerCommand followTrajectory(TimedTrajectory<Pose2dWithCurvature> trajectory, Gear gear, boolean reset) {
+		mCurrentGear = Robot.getDrivetrainGear();
+		return new TrajectoryTrackerCommand(this, () -> trajectory, reset);
 	}
 
 	/**

@@ -5,6 +5,9 @@ import com.team254.lib.physics.DifferentialDrive;
 import com.team254.lib.physics.DifferentialDrive.ChassisState;
 import com.team254.lib.physics.DifferentialDrive.WheelState;
 
+import org.ghrobotics.lib.localization.Localization;
+import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2d;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 import kotlin.ranges.RangesKt;
 
@@ -137,4 +140,12 @@ public interface DriveTrainBase<T> {
 	public default void stop() {
 		tankDrive(0, 0);
 	}
+
+	public Localization getLocalization();
+
+	public default Pose2d getRobotPosition() {
+		return getLocalization().getRobotPosition();
+	}
+
+	abstract void setOutput(WheelState wheelVelocities, WheelState wheelVoltages);
 }
