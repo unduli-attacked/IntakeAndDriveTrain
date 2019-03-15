@@ -27,7 +27,7 @@ public class PWMHelperRocketAuto extends CommandGroup {
 		char side = Robot.startingPos.getSelected().charAt(0);
 		//FIXME assumes no middle hab start
 
-		TimedTrajectory<Pose2dWithCurvature> traject = Trajectories.generatedLGTrajectories.get("hab"+side+" to rocket"+side+"F"); //current trajectory from hashmap in Trajectories
+		TimedTrajectory<Pose2dWithCurvature> traject = Trajectories.generatedLGTrajectories.get("hab" + side + " to rocket" + side + "F"); //current trajectory from hashmap in Trajectories
 
 		addSequential(PWMDriveTrain.getInstance().followTrajectory(traject)); // drive to goal 
 
@@ -35,7 +35,7 @@ public class PWMHelperRocketAuto extends CommandGroup {
 
 		addSequential(new PWMDriveDistanceTheThird(LengthKt.getFeet(3), true));
 		// spline over to the rocket
-		var rocketToLoading = Trajectories.generatedLGTrajectories.get("rocket"+side+"F to loading"+side);
+		var rocketToLoading = Trajectories.generatedLGTrajectories.get("rocket" + side + "F to loading" + side);
 		addSequential(PWMDriveTrain.getInstance().followTrajectory(rocketToLoading)); //drive to goal
 
 		addSequential(new PWMDriveDistanceTheThird(LengthKt.getFeet(1.5), false));
@@ -43,7 +43,7 @@ public class PWMHelperRocketAuto extends CommandGroup {
 		addSequential(new RunIntake(1, 1));
 
 		//FIXME generate trajectories
-		var loadingToRocketClose = Trajectories.generatedLGTrajectories.get("loading"+side+" to rocket"+side+"C");
+		var loadingToRocketClose = Trajectories.generatedLGTrajectories.get("loading" + side + " to rocket" + side + "C");
 		addSequential(PWMDriveTrain.getInstance().followTrajectory(loadingToRocketClose)); //drive to goal
 		addSequential(new RunIntake(-1, 1));
 
