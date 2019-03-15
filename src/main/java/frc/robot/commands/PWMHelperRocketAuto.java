@@ -22,7 +22,7 @@ public class PWMHelperRocketAuto extends CommandGroup {
 		//FIXME generate trajectories
 		// TimedTrajectory<Pose2dWithCurvature> traject = Trajectories.generatedLGTrajectories.get("habR" + " to " + "rocketRF"); //current trajectory from hashmap in Trajectories
 
-		// addSequential(PWMDriveTrain.getInstance().followTrajectory(traject)); // drive to goal //FIXME what even is a timeout
+		// addSequential(PWMDriveTrain.getInstance().followTrajectory(traject)); // drive to goal 
 
 		addSequential(new RunIntake(-1, 1.5));
 
