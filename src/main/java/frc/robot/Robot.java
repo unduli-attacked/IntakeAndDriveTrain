@@ -20,7 +20,7 @@ import frc.robot.commands.TeleopDriving.DriveType;
  */
 public class Robot extends TimedRobot {
 
-	public SendableChooser<String> startingPos = new SendableChooser<String>();
+	public static SendableChooser<String> startingPos = new SendableChooser<String>();
 	DriverStationSim sim = new DriverStationSim();
 
 	public static PWMDriveTrain drive = new PWMDriveTrain();
@@ -33,8 +33,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		startingPos.setDefaultOption("Center", "M");
-		startingPos.addOption("Left", "L");
+		startingPos.setDefaultOption("Left", "L");
 		startingPos.addOption("Right", "R");
 
 		Logger.log("robot program starttttting");
