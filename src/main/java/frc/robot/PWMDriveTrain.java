@@ -5,11 +5,15 @@ import org.ghrobotics.lib.localization.TankEncoderLocalization;
 import org.ghrobotics.lib.mathematics.twodim.control.RamseteTracker;
 import org.ghrobotics.lib.mathematics.twodim.control.TrajectoryTracker;
 import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2d;
+import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2dWithCurvature;
+import org.ghrobotics.lib.mathematics.twodim.trajectory.types.TimedTrajectory;
 import org.ghrobotics.lib.mathematics.units.Length;
 import org.ghrobotics.lib.mathematics.units.Rotation2d;
 import org.ghrobotics.lib.mathematics.units.Rotation2dKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
+
+import java.util.function.Supplier;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
@@ -18,6 +22,7 @@ import com.team254.lib.physics.DifferentialDrive;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.commands.PWMTrajectoryTrackerCommand;
 import frc.robot.lib.EncodedSpark;
 import frc.robot.lib.HalfBakedEncodedPWMMotorController;
 import frc.robot.lib.PIDSetting;
@@ -35,6 +40,8 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 	public static final double kDriveZeta = 0.7 * 1d; // Unitless dampening co-efficient
 
 	Localization localization;
+
+	public Supplier<TimedTrajectory<Pose2dWithCurvature>> trajectSource;
 
 	public AHRS gyro = new AHRS(SPI.Port.kMXP);
 	double gyroZero;
@@ -79,6 +86,8 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 
 		/* set the robot pose to 0,0,0 */
 		localization.reset(new Pose2d());
+
+		this.trajectSource = () -> (Trajectories.generatedHGTrajectories.get("habM to cargoMR"));
 	}
 
 	/**
@@ -191,6 +200,16 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 	@Override
 	public void setNeutralMode(NeutralMode mode) {
 		//FIXME i guess dont?????
+	}
+
+
+	private void setTrajectorySource(TimedTrajectory<Pose2dWithCurvature> traject){
+		this.trajectSource = () -> traject;
+	}
+
+	public PWMTrajectoryTrackerCommand followTrajectory(TimedTrajectory<Pose2dWithCurvature> trajectory){
+		this.setTrajectorySource(trajectory);
+		return new PWMTrajectoryTrackerCommand(this, this.trajectSource);
 	}
 
 }

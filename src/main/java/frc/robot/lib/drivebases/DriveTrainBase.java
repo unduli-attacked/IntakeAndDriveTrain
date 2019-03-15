@@ -5,6 +5,8 @@ import com.team254.lib.physics.DifferentialDrive;
 import com.team254.lib.physics.DifferentialDrive.ChassisState;
 import com.team254.lib.physics.DifferentialDrive.WheelState;
 
+import org.ghrobotics.lib.mathematics.twodim.control.TrajectoryTracker;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 import kotlin.ranges.RangesKt;
 
@@ -137,4 +139,6 @@ public interface DriveTrainBase<T> {
 	public default void stop() {
 		tankDrive(0, 0);
 	}
+
+	public TrajectoryTracker getTrajectoryTracker();
 }

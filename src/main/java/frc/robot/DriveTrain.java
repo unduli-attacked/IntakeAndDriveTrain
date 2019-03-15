@@ -5,13 +5,20 @@ import org.ghrobotics.lib.localization.TankEncoderLocalization;
 import org.ghrobotics.lib.mathematics.twodim.control.RamseteTracker;
 import org.ghrobotics.lib.mathematics.twodim.control.TrajectoryTracker;
 import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2d;
+import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2dWithCurvature;
+import org.ghrobotics.lib.mathematics.twodim.trajectory.types.TimedEntry;
+import org.ghrobotics.lib.mathematics.twodim.trajectory.types.TimedTrajectory;
+import org.ghrobotics.lib.mathematics.twodim.trajectory.types.Trajectory;
 import org.ghrobotics.lib.mathematics.units.Length;
 import org.ghrobotics.lib.mathematics.units.Rotation2d;
 import org.ghrobotics.lib.mathematics.units.Rotation2dKt;
+import org.ghrobotics.lib.mathematics.units.Time;
 import org.ghrobotics.lib.mathematics.units.TimeUnitsKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
 import org.ghrobotics.lib.subsystems.drive.TankDriveSubsystem;
 import org.ghrobotics.lib.wrappers.ctre.FalconSRX;
+
+import java.util.function.Supplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -20,6 +27,7 @@ import com.team254.lib.physics.DifferentialDrive;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.commands.TrajectoryTrackerCommand;
 import frc.robot.lib.drivebases.DriveTrainBase;
 
 public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<FalconSRX<Length>> {
@@ -31,6 +39,8 @@ public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<Fal
 	/* Ramsete constants */
 	public static final double kDriveBeta = 2 * 1d; // Inverse meters squared
 	public static final double kDriveZeta = 0.7 * 1d; // Unitless dampening co-efficient
+
+	Supplier<TimedTrajectory<Pose2dWithCurvature>> trajectSource;
 
 	Localization localization;
 
@@ -56,6 +66,8 @@ public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<Fal
 
 		/* set the robot pose to 0,0,0 */
 		localization.reset(new Pose2d());
+
+		this.trajectSource = () -> Trajectories.generatedHGTrajectories.get("habM to cargoMR");
 	}
 
 	/**
@@ -119,6 +131,15 @@ public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<Fal
 	@Override
 	public Subsystem getRealSubsystem() {
 		return this.getWpiSubsystem();
+	}
+
+	private void setTrajectorySource(TimedTrajectory<Pose2dWithCurvature> traject){
+		this.trajectSource = () -> traject;
+	}
+
+	public TrajectoryTrackerCommand followTrajectory(TimedTrajectory<Pose2dWithCurvature> trajectory){
+		this.setTrajectorySource(trajectory);
+		return new TrajectoryTrackerCommand(this, this.trajectSource);
 	}
 
 	//FIXME so there's no initDefaultCommand for TankDriveSubsystem
