@@ -3,11 +3,10 @@ package frc.robot.commands;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.lib.drivebases.DriveTrainBase;
-import frc.robot.lib.HalfBakedEncodedPWMMotorController;
-import frc.robot.OI;
 import frc.robot.PWMDriveTrain;
 import frc.robot.Robot;
+import frc.robot.lib.HalfBakedEncodedPWMMotorController;
+import frc.robot.lib.drivebases.DriveTrainBase;
 
 public class TeleopDriving extends Command {
 

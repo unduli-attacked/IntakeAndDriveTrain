@@ -1,24 +1,21 @@
 package frc.robot;
 
+import java.util.function.Supplier;
+
 import org.ghrobotics.lib.localization.Localization;
 import org.ghrobotics.lib.localization.TankEncoderLocalization;
 import org.ghrobotics.lib.mathematics.twodim.control.RamseteTracker;
 import org.ghrobotics.lib.mathematics.twodim.control.TrajectoryTracker;
 import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2d;
 import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2dWithCurvature;
-import org.ghrobotics.lib.mathematics.twodim.trajectory.types.TimedEntry;
 import org.ghrobotics.lib.mathematics.twodim.trajectory.types.TimedTrajectory;
-import org.ghrobotics.lib.mathematics.twodim.trajectory.types.Trajectory;
 import org.ghrobotics.lib.mathematics.units.Length;
 import org.ghrobotics.lib.mathematics.units.Rotation2d;
 import org.ghrobotics.lib.mathematics.units.Rotation2dKt;
-import org.ghrobotics.lib.mathematics.units.Time;
 import org.ghrobotics.lib.mathematics.units.TimeUnitsKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
 import org.ghrobotics.lib.subsystems.drive.TankDriveSubsystem;
 import org.ghrobotics.lib.wrappers.ctre.FalconSRX;
-
-import java.util.function.Supplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -133,11 +130,11 @@ public class DriveTrain extends TankDriveSubsystem implements DriveTrainBase<Fal
 		return this.getWpiSubsystem();
 	}
 
-	private void setTrajectorySource(TimedTrajectory<Pose2dWithCurvature> traject){
+	private void setTrajectorySource(TimedTrajectory<Pose2dWithCurvature> traject) {
 		this.trajectSource = () -> traject;
 	}
 
-	public TrajectoryTrackerCommand followTrajectory(TimedTrajectory<Pose2dWithCurvature> trajectory){
+	public TrajectoryTrackerCommand followTrajectory(TimedTrajectory<Pose2dWithCurvature> trajectory) {
 		this.setTrajectorySource(trajectory);
 		return new TrajectoryTrackerCommand(this, this.trajectSource);
 	}

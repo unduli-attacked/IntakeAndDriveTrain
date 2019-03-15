@@ -26,10 +26,9 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.DriveTrain;
 import frc.robot.PWMDriveTrain;
-import frc.robot.Robot;
-import frc.robot.Trajectories;
 import frc.robot.Robot.Logger;
-import frc.robot.lib.drivebases.DriveTrainBase;
+import frc.robot.Trajectories;
+
 // @SuppressWarnings({"WeakerAccess", "unused"})
 public class PWMDriveDistanceTheThird extends Command {
 	private TrajectoryTracker trajectoryTracker;
@@ -45,7 +44,6 @@ public class PWMDriveDistanceTheThird extends Command {
 	double mCurrentRight;
 	boolean itDed = false;
 	TimedTrajectory<Pose2dWithCurvature> trajectory;
-
 
 	Notifier mUpdateNotifier;
 
@@ -87,21 +85,21 @@ public class PWMDriveDistanceTheThird extends Command {
 		var currentPose = DriveTrain.getInstance().getLocalization().getRobotPosition();
 		System.out.println("CURRENT POSE: " + currentPose.getTranslation().getX().getInch() + "," + currentPose.getTranslation().getY().getInch() + "," + currentPose.getRotation().getDegree());
 		Translation2d offsetTrans;
-		if(!reversed) {
-		// offsetTrans = new Translation2d(distance, currentPose.getRotation().plus(Rotation2dKt.getDegree(-0)));
+		if (!reversed) {
+			// offsetTrans = new Translation2d(distance, currentPose.getRotation().plus(Rotation2dKt.getDegree(-0)));
 			offsetTrans = new Translation2d(distance.times(currentPose.getRotation().plus(Rotation2dKt.getDegree(90)).getCos()), distance.times(currentPose.getRotation().plus(Rotation2dKt.getDegree(90)).getSin()));
 		} else {
 			offsetTrans = new Translation2d(distance, currentPose.getRotation().plus(Rotation2dKt.getDegree(180)));
 		}
-		
+
 		System.out.println("Calculated offset is " + offsetTrans.getX().getInch() + "," + offsetTrans.getY().getInch());
 
 		// var offsetPose = currentPose.plus(new Pose2d(offsetTrans, Rotation2dKt.getDegree(0)));
 		Pose2d offsetPose;//
 		offsetPose = new Pose2d(
-			currentPose.getTranslation().getX().plus(offsetTrans.getX()), 
-			currentPose.getTranslation().getY().plus(offsetTrans.getY()), 
-			currentPose.getRotation());
+				currentPose.getTranslation().getX().plus(offsetTrans.getX()),
+				currentPose.getTranslation().getY().plus(offsetTrans.getY()),
+				currentPose.getRotation());
 		// if(!reversed) {
 		// 	offsetPose = new Pose2d(
 		// 		currentPose.getTranslation().getX().plus(offsetTrans.getX()), 
@@ -116,10 +114,8 @@ public class PWMDriveDistanceTheThird extends Command {
 
 		System.out.println("OFFSET POSE: " + offsetPose.getTranslation().getX().getInch() + "," + offsetPose.getTranslation().getY().getInch() + "," + offsetPose.getRotation().getDegree());
 
-
 		var waypoints = Arrays.asList(
-			currentPose, offsetPose
-		);
+				currentPose, offsetPose);
 
 		// List<Pose2d> waypoints = (!reversed) ? Arrays.asList(
 		// 	new Pose2d(LengthKt.getInch(0), LengthKt.getInch(30), Rotation2dKt.getDegree(0)),
@@ -128,57 +124,55 @@ public class PWMDriveDistanceTheThird extends Command {
 		// 			new Pose2d(LengthKt.getInch(0), LengthKt.getInch(30), Rotation2dKt.getDegree(0)),
 		// 			new Pose2d(distance.times(-1), LengthKt.getInch(30), Rotation2dKt.getDegree(0)));
 
-	try {
-		trajectory = Trajectories.generateTrajectoryLowGear(waypoints, reversed);		
-	} catch (RuntimeException e) {
-		itDed = true;
-	}
-
-	if(trajectory != null) {
-
-
-
-		trajectorySource = () -> (trajectory);
-
-		LiveDashboard.INSTANCE.setFollowingPath(false);
-
-		if (trajectorySource == null) {
-			Logger.log("Sadly the trajectories are not generated. the person responsible for the trajectories has been sacked.");
-			Trajectories.generateAllTrajectories();
+		try {
+			trajectory = Trajectories.generateTrajectoryLowGear(waypoints, reversed);
+		} catch (RuntimeException e) {
+			itDed = true;
 		}
 
-		Logger.log("get: " + trajectorySource.get().getFirstState().getState().getCurvature().toString());
+		if (trajectory != null) {
 
-		trajectoryTracker.reset(this.trajectorySource.get());
+			trajectorySource = () -> (trajectory);
 
-		Logger.log("first pose: " + trajectorySource.get().getFirstState().getState().getPose().getTranslation().getX().getFeet());
+			LiveDashboard.INSTANCE.setFollowingPath(false);
 
-		if (reset == true) {
-			DriveTrain.getInstance().getLocalization().reset(trajectorySource.get().getFirstState().getState().getPose());
-		}
-
-		Logger.log("desired linear, real linear");
-
-		LiveDashboard.INSTANCE.setFollowingPath(true);
-
-		mUpdateNotifier = new Notifier(() -> {
-			output = trajectoryTracker.nextState(driveBase.getRobotPosition(), TimeUnitsKt.getMillisecond(System.currentTimeMillis()));
-
-			TrajectorySamplePoint<TimedEntry<Pose2dWithCurvature>> referencePoint = trajectoryTracker.getReferencePoint();
-			if (referencePoint != null) {
-				Pose2d referencePose = referencePoint.getState().getState().getPose();
-
-				LiveDashboard.INSTANCE.setPathX(referencePose.getTranslation().getX().getFeet());
-				LiveDashboard.INSTANCE.setPathY(referencePose.getTranslation().getY().getFeet());
-				LiveDashboard.INSTANCE.setPathHeading(referencePose.getRotation().getRadian());
+			if (trajectorySource == null) {
+				Logger.log("Sadly the trajectories are not generated. the person responsible for the trajectories has been sacked.");
+				Trajectories.generateAllTrajectories();
 			}
-			// Logger.log("Linear: " + output.getLinearVelocity().getValue() + " Angular: " + output.getAngularVelocity().getValue() );
-			driveBase.setOutput(output);
-		});
-		mUpdateNotifier.startPeriodic(0.01);
-	}
 
-}
+			Logger.log("get: " + trajectorySource.get().getFirstState().getState().getCurvature().toString());
+
+			trajectoryTracker.reset(this.trajectorySource.get());
+
+			Logger.log("first pose: " + trajectorySource.get().getFirstState().getState().getPose().getTranslation().getX().getFeet());
+
+			if (reset == true) {
+				DriveTrain.getInstance().getLocalization().reset(trajectorySource.get().getFirstState().getState().getPose());
+			}
+
+			Logger.log("desired linear, real linear");
+
+			LiveDashboard.INSTANCE.setFollowingPath(true);
+
+			mUpdateNotifier = new Notifier(() -> {
+				output = trajectoryTracker.nextState(driveBase.getRobotPosition(), TimeUnitsKt.getMillisecond(System.currentTimeMillis()));
+
+				TrajectorySamplePoint<TimedEntry<Pose2dWithCurvature>> referencePoint = trajectoryTracker.getReferencePoint();
+				if (referencePoint != null) {
+					Pose2d referencePose = referencePoint.getState().getState().getPose();
+
+					LiveDashboard.INSTANCE.setPathX(referencePose.getTranslation().getX().getFeet());
+					LiveDashboard.INSTANCE.setPathY(referencePose.getTranslation().getY().getFeet());
+					LiveDashboard.INSTANCE.setPathHeading(referencePose.getRotation().getRadian());
+				}
+				// Logger.log("Linear: " + output.getLinearVelocity().getValue() + " Angular: " + output.getAngularVelocity().getValue() );
+				driveBase.setOutput(output);
+			});
+			mUpdateNotifier.startPeriodic(0.01);
+		}
+
+	}
 
 	@Override
 	protected void execute() {

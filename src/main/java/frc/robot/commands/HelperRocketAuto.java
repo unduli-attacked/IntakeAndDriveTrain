@@ -1,16 +1,8 @@
 package frc.robot.commands;
 
-import java.util.concurrent.TimeUnit;
-
-import org.ghrobotics.lib.mathematics.twodim.geometry.Pose2dWithCurvature;
-import org.ghrobotics.lib.mathematics.twodim.trajectory.types.TimedTrajectory;
 import org.ghrobotics.lib.mathematics.units.LengthKt;
-import org.ghrobotics.lib.mathematics.units.TimeUnitsKt;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.DriveTrain;
-import frc.robot.Trajectories;
 
 public class HelperRocketAuto extends CommandGroup {
 	public HelperRocketAuto() {
@@ -25,7 +17,6 @@ public class HelperRocketAuto extends CommandGroup {
 			Place hatch
 		*/
 
-
 		/* Get a trajectory to move to the cargo ship. THE ROBOT IS REVERSED */
 
 		//FIXME generate trajectories
@@ -35,13 +26,11 @@ public class HelperRocketAuto extends CommandGroup {
 
 		addSequential(new RunIntake(-1, 1.5));
 
-		
 		addSequential(new DriveDistanceTheThird(LengthKt.getFeet(3), true));
 		// spline over to the rocket
 		//FIXME generate trajectories
 		// var rocketToLoading = Trajectories.generatedLGTrajectories.get("rocketRF to loadingR");
 		// addSequential(DriveTrain.getInstance().followTrajectory(rocketToLoading)); //drive to goal
-
 
 		addSequential(new DriveDistanceTheThird(LengthKt.getFeet(1.5), false));
 
@@ -51,7 +40,6 @@ public class HelperRocketAuto extends CommandGroup {
 		// var loadingToRocketFar = Trajectories.generatedLGTrajectories.get("loadingR to rocketRF");
 		// addSequential(DriveTrain.getInstance().followTrajectory(loadingToRocketFar)); //drive to goal
 		addSequential(new RunIntake(-1, 1));
-
 
 	}
 

@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData(startingPos);
 		// Logger.log("Is the robot enabled? " + sim.getEnabled());
 
-		if(Math.abs(oi.getForwardAxis()) > 0.5 || Math.abs(oi.getForwardAxis()) > 0.5){
+		if (Math.abs(oi.getForwardAxis()) > 0.5 || Math.abs(oi.getForwardAxis()) > 0.5) {
 			//break out of the auto command if the operator tries to take control
 			currentDriveCommand = new TeleopDriving(DriveType.ARCADE);
 			currentDriveCommand.start();

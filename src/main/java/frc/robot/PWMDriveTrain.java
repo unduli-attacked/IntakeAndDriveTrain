@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.function.Supplier;
+
 import org.ghrobotics.lib.localization.Localization;
 import org.ghrobotics.lib.localization.TankEncoderLocalization;
 import org.ghrobotics.lib.mathematics.twodim.control.RamseteTracker;
@@ -12,8 +14,6 @@ import org.ghrobotics.lib.mathematics.units.Rotation2d;
 import org.ghrobotics.lib.mathematics.units.Rotation2dKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitKt;
 import org.ghrobotics.lib.mathematics.units.nativeunits.NativeUnitLengthModel;
-
-import java.util.function.Supplier;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.kauailabs.navx.frc.AHRS;
@@ -202,12 +202,11 @@ public class PWMDriveTrain extends Subsystem implements DifferentialTrackerDrive
 		//FIXME i guess dont?????
 	}
 
-
-	private void setTrajectorySource(TimedTrajectory<Pose2dWithCurvature> traject){
+	private void setTrajectorySource(TimedTrajectory<Pose2dWithCurvature> traject) {
 		this.trajectSource = () -> traject;
 	}
 
-	public PWMTrajectoryTrackerCommand followTrajectory(TimedTrajectory<Pose2dWithCurvature> trajectory){
+	public PWMTrajectoryTrackerCommand followTrajectory(TimedTrajectory<Pose2dWithCurvature> trajectory) {
 		this.setTrajectorySource(trajectory);
 		return new PWMTrajectoryTrackerCommand(this, this.trajectSource);
 	}
