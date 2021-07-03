@@ -23,7 +23,7 @@
       "name": "CodeLens (Launch)",
       "request": "launch",
       "mainClass": "frc.robot.Main",
-      "projectName": "frc-java-command-codebase"
+      "projectName": "IntakeAndDriveTrain"
     },
     {
       "type": "wpilib",
